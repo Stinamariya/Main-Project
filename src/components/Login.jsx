@@ -1,7 +1,7 @@
 import { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import SkinAnalysis from "./Skinanalysis";
+
 
 const Login = ({ setToken }) => {
   const [email, setEmail] = useState("");
@@ -11,30 +11,30 @@ const Login = ({ setToken }) => {
   const navigate = useNavigate();
 
   const handleLogin = async () => {
-    setErrorMessage(""); // Clear any previous error messages
-    setIsLoading(true); // Show loading state
+    setErrorMessage(""); 
+    setIsLoading(true); 
     try {
       const response = await axios.post("http://localhost:3031/Login", { email, password });
-
-      // Check if response is successful
+  
       if (response.data.status === "success") {
-        const { token, role, userId, username } = response.data; // Destructure username
-
-        // Save token, role, userId, and username to sessionStorage
-        sessionStorage.setItem("token", token);
+        const { token, role, userId, username } = response.data; 
+  
+        sessionStorage.setItem("token", token);  
         sessionStorage.setItem("userId", userId); 
-        sessionStorage.setItem("username", username); // Store username
-        navigate("/Skinanalysis");
+        sessionStorage.setItem("username", username); 
+  
+        navigate("/Questionnaire");  
       } else {
-        setErrorMessage("Login failed: " + response.data.message); // Show error message
+        setErrorMessage("Login failed: " + response.data.message); 
       }
     } catch (error) {
       console.error("Login failed:", error);
-      setErrorMessage("Login failed. Please try again."); // Show error message
+      setErrorMessage("Login failed. Please try again."); 
     } finally {
-      setIsLoading(false); // Hide loading state
+      setIsLoading(false); 
     }
   };
+  
 
   return (
     <div style={styles.body}>
@@ -120,7 +120,7 @@ const styles = {
   },
   header: {
     fontSize: '2.5em',
-    color: '#FF6F61', // Skincare brand color
+    color: '#FF6F61', 
     fontWeight: 'bold',
   },
   subHeader: {
