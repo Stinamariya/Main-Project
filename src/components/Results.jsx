@@ -3,89 +3,90 @@ import { useLocation } from "react-router-dom";
 
 const Results = () => {
   const location = useLocation();
-  console.log("Location State:", location.state);  // Log the state
-
   const { predictedSkinType, predictedSkinCondition } = location.state || {};
 
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
+  // Fetch recommendations whenever predictedSkinType or predictedSkinCondition change
   useEffect(() => {
-    console.log("🔹 Received Props from Location:", { predictedSkinType, predictedSkinCondition });
-
-    // If skin type or condition is missing, show an error
     if (!predictedSkinType || !predictedSkinCondition) {
-      setError("❌ Missing Skin Data. Please fill the form again.");
+      setError("Missing Skin Data. Please fill out the form again.");
       return;
     }
-
-    // Fetch recommended products if we have valid skin type and condition
-    fetchRecommendedProducts();
+    fetchRecommendedProducts(predictedSkinType, predictedSkinCondition);
   }, [predictedSkinType, predictedSkinCondition]);
 
-  const fetchRecommendedProducts = async () => {
+  const fetchRecommendedProducts = async (skinType, skinCondition) => {
     setLoading(true);
-    setError("");  // Reset error state before fetching
+    setError("");
+
+    console.log("Sending data to backend:", { skin_type: skinType, skin_condition: skinCondition });
 
     try {
-      console.log("🔹 Sending API Request:", { predictedSkinType, predictedSkinCondition });
-
-      const response = await fetch("http://localhost:5000/recommend", {  // Fixed URL
+      const response = await fetch("http://127.0.0.1:5000/recommend", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          skin_type: predictedSkinType,
-          skin_condition: predictedSkinCondition,
-        }),
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ skin_type: skinType, skin_condition: skinCondition }),
+        mode: "cors",
       });
 
-      const data = await response.json();
-      console.log("🔹 API Response:", data);
-
-      if (response.ok) {
-        setProducts(data.recommended_products || []);
-      } else {
-        setError(data.error || "❌ Failed to fetch recommendations.");
+      console.log("Response status:", response.status);
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
       }
-    } catch (error) {
-      console.error("❌ Network Error:", error);
-      setError("❌ Network error. Please try again.");
-    }
 
+      const data = await response.json();
+      console.log("Backend Response:", data);
+      setProducts(data.recommended_products || []);
+    } catch (error) {
+      console.error("Network Error:", error);
+      setError(`Network error: ${error.message}. Please check if the backend is running.`);
+    }
     setLoading(false);
   };
 
   return (
-    <div>
+    <div className="results-container">
       <h2>Skin Analysis Result</h2>
       <p><strong>Predicted Skin Type:</strong> {predictedSkinType || "Data not available"}</p>
       <p><strong>Predicted Skin Condition:</strong> {predictedSkinCondition || "Data not available"}</p>
 
-      <button onClick={fetchRecommendedProducts} disabled={loading}>
+      {/* Button to reload recommendations, if needed */}
+      <button 
+        onClick={() => fetchRecommendedProducts(predictedSkinType, predictedSkinCondition)} 
+        disabled={loading}
+        className="recommendation-button"
+      >
         {loading ? "Loading..." : "Show Recommended Products"}
       </button>
 
+      {/* Display error if any */}
       {error && <p style={{ color: "red" }}>{error}</p>}
 
+      {/* Render product recommendations */}
       {products.length > 0 ? (
-        <div>
-          <h3>Recommended Products</h3>
-          <ul>
-            {products.map((product, index) => (
-              <li key={index} style={{ border: "1px solid #ddd", padding: "10px", marginBottom: "10px" }}>
-                <img src={product.image_url || "fallback-image-url.jpg"} alt={product.name} width="100" />
-                <p><strong>{product.name}</strong></p>
-                <p>{product.description}</p>
-                <p>Price: ${product.price}</p>
-              </li>
-            ))}
-          </ul>
+        <div className="products-list">
+          {products.map((product, index) => (
+            <div key={index} className="product-item">
+              <img 
+                src={product.product_pic || "fallback-image.jpg"} 
+                alt={product.Product} 
+                className="product-image"
+              />
+              <div className="product-details">
+                <p><strong>{product.Product}</strong></p>
+                <p>{product.Concern}</p>
+                <a href={product.product_url} target="_blank" rel="noopener noreferrer">
+                  View Product
+                </a>
+              </div>
+            </div>
+          ))}
         </div>
       ) : (
-        !loading && !error && <p>No recommendations available yet.</p>
+        <p>No products found for your skin type and condition.</p>
       )}
     </div>
   );
