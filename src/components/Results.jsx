@@ -1,38 +1,246 @@
-import React from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+// import React, { useEffect, useState } from "react";
+// import { useLocation } from "react-router-dom";
 
-const Results = () => {
-  const location = useLocation();
-  const navigate = useNavigate();
+// const Results = () => {
+//   const location = useLocation();
+//   const { predictedSkinType, predictedSkinCondition } = location.state || {};
 
-  
-  console.log("📌 Full Location State:", location.state);
+//   const [products, setProducts] = useState([]);
+//   const [loading, setLoading] = useState(false);
+//   const [error, setError] = useState("");
 
-  
-  const predictionData = location.state?.prediction?.prediction || {};
-  console.log("📌 Corrected Extracted Prediction Data:", predictionData);
+//   // Fetch recommendations whenever predictedSkinType or predictedSkinCondition change
+//   useEffect(() => {
+//     if (!predictedSkinType || !predictedSkinCondition) {
+//       setError("Missing Skin Data. Please fill out the form again.");
+//       return;
+//     }
+//     fetchRecommendedProducts(predictedSkinType, predictedSkinCondition);
+//   }, [predictedSkinType, predictedSkinCondition]);
 
-  
-  const predictedSkinType = predictionData?.predictedSkinType;
-  const predictedSkinCondition = predictionData?.predictedSkinCondition;
+//   const fetchRecommendedProducts = async (skinType, skinCondition) => {
+//     setLoading(true);
+//     setError("");
 
-  if (!predictedSkinType || !predictedSkinCondition) {
-    return <h2>No prediction data found. Please complete the questionnaire.</h2>;
-  }
+//     console.log("Sending data to backend:", { skin_type: skinType, skin_condition: skinCondition });
 
-  return (
-    <div className="container">
-      <h2>Predicted Skin Analysis</h2>
-      <p><strong>Skin Type:</strong> {predictedSkinType}</p>
-      <p><strong>Skin Condition:</strong> {predictedSkinCondition}</p>
+//     try {
+//       const response = await fetch("http://127.0.0.1:5000/recommend", {
+//         method: "POST",
+//         headers: { "Content-Type": "application/json" },
+//         body: JSON.stringify({ skin_type: skinType, skin_condition: skinCondition }),
+//         mode: "cors",
+//       });
 
-      <button 
-        onClick={() => navigate("/recommendations", { state: { prediction: predictionData } })}
-      >
-        View Recommended Products
-      </button>
-    </div>
-  );
+//       console.log("Response status:", response.status);
+//       if (!response.ok) {
+//         throw new Error(`HTTP error! Status: ${response.status}`);
+//       }
+
+//       const data = await response.json();
+//       console.log("Backend Response:", data);
+//       setProducts(data.recommended_products || []);
+//     } catch (error) {
+//       console.error("Network Error:", error);
+//       setError(`Network error: ${error.message}. Please check if the backend is running.`);
+//     }
+//     setLoading(false);
+//   };
+
+//   return (
+//     <div className="results-container">
+//       <h2>Skin Analysis Result</h2>
+//       <p><strong>Predicted Skin Type:</strong> {predictedSkinType || "Data not available"}</p>
+//       <p><strong>Predicted Skin Condition:</strong> {predictedSkinCondition || "Data not available"}</p>
+
+//       {/* Button to reload recommendations, if needed */}
+//       <button 
+//         onClick={() => fetchRecommendedProducts(predictedSkinType, predictedSkinCondition)} 
+//         disabled={loading}
+//         className="recommendation-button"
+//       >
+//         {loading ? "Loading..." : "Show Recommended Products"}
+//       </button>
+
+//       {/* Display error if any */}
+//       {error && <p style={{ color: "red" }}>{error}</p>}
+
+//       {/* Render product recommendations */}
+//       {products.length > 0 ? (
+//         <div className="products-list">
+//           {products.map((product, index) => (
+//             <div key={index} className="product-item">
+//               <img 
+//                 src={product.product_pic || "fallback-image.jpg"} 
+//                 alt={product.Product} 
+//                 className="product-image"
+//               />
+//               <div className="product-details">
+//                 <p><strong>{product.Product}</strong></p>
+//                 <p>{product.Concern}</p>
+//                 <a href={product.product_url} target="_blank" rel="noopener noreferrer">
+//                   View Product
+//                 </a>
+//               </div>
+//             </div>
+//           ))}
+//         </div>
+//       ) : (
+//         <p>No products found for your skin type and condition.</p>
+//       )}
+//     </div>
+//   );
+// };
+
+// export default Results;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// import React, { useEffect, useState } from "react";
+// import { useLocation } from "react-router-dom";
+
+// const Results = () => {
+//   const location = useLocation();
+//   const { predictedSkinType, predictedSkinCondition } = location.state || {};
+
+//   const [products, setProducts] = useState([]);
+//   const [loading, setLoading] = useState(false);
+//   const [error, setError] = useState("");
+
+//   // Fetch recommendations whenever predictedSkinType or predictedSkinCondition change
+//   useEffect(() => {
+//     if (!predictedSkinType || !predictedSkinCondition) {
+//       setError("Missing Skin Data. Please fill out the form again.");
+//       return;
+//     }
+//     fetchRecommendedProducts(predictedSkinType, predictedSkinCondition);
+//   }, [predictedSkinType, predictedSkinCondition]);
+
+//   const fetchRecommendedProducts = async (skinType, skinCondition) => {
+//     setLoading(true);
+//     setError("");
+
+//     console.log("Sending data to backend:", { skin_type: skinType, skin_condition: skinCondition });
+
+//     try {
+//       const response = await fetch("http://127.0.0.1:5000/recommend", {
+//         method: "POST",
+//         headers: { "Content-Type": "application/json" },
+//         body: JSON.stringify({ skin_type: skinType, skin_condition: skinCondition }),
+//         mode: "cors",
+//       });
+
+//       console.log("Response status:", response.status);
+//       if (!response.ok) {
+//         throw new Error(`HTTP error! Status: ${response.status}`);
+//       }
+
+//       const data = await response.json();
+//       console.log("Backend Response:", data); // Check the response structure
+
+//       // Set products array if recommended_products is valid
+//       setProducts(data.recommended_products || []);
+//     } catch (error) {
+//       console.error("Network Error:", error);
+//       setError(`Network error: ${error.message}. Please check if the backend is running.`);
+//     }
+//     setLoading(false);
+//   };
+
+//   return (
+//     <div className="results-container">
+//       <h2>Skin Analysis Result</h2>
+//       <p><strong>Predicted Skin Type:</strong> {predictedSkinType || "Data not available"}</p>
+//       <p><strong>Predicted Skin Condition:</strong> {predictedSkinCondition || "Data not available"}</p>
+
+//       {/* Button to reload recommendations, if needed */}
+//       <button 
+//         onClick={() => fetchRecommendedProducts(predictedSkinType, predictedSkinCondition)} 
+//         disabled={loading}
+//         className="recommendation-button"
+//       >
+//         {loading ? "Loading..." : "Show Recommended Products"}
+//       </button>
+
+//       {/* Display error if any */}
+//       {error && <p style={{ color: "red" }}>{error}</p>}
+
+//       {/* Render product recommendations */}
+//       {products.length > 0 ? (
+//         <div className="products-list">
+//           {products.map((product, index) => (
+//             <div key={index} className="product-item">
+//               <img 
+//                 src={product.product_pic || "fallback-image.jpg"} 
+//                 alt={product.Product} 
+//                 className="product-image"
+//                 style={{ width: "100px", height: "100px", objectFit: "cover" }}
+//               />
+//               <div className="product-details">
+//                 <p><strong>{product.Product}</strong></p>
+//                 <p>{product.Concern}</p>
+//                 <a href={product.product_url} target="_blank" rel="noopener noreferrer">
+//                   View Product
+//                 </a>
+//               </div>
+//             </div>
+//           ))}
+//         </div>
+//       ) : (
+//         <p>No products found for your skin type and condition.</p>
+//       )}
+//     </div>
+//   );
+// };
+
+// export default Results;
+
+
+
+
+
+
+
+
+
+
+
+
+import { useEffect, useState } from "react";
+import axios from "axios";
+
+const Results = ({ skinType, skinCondition }) => {
+    const [products, setProducts] = useState([]);
+
+    useEffect(() => {
+        axios.get(`http://localhost:5000/api/products?skinType=${skinType}&condition=${skinCondition}`)
+            .then(res => setProducts(res.data));
+    }, [skinType, skinCondition]);
+
+    return (
+        <div>
+            <h2>Recommended Products</h2>
+            {products.map((product) => (
+                <div key={product.id}>
+                    <h3>{product.name}</h3>
+                    <p>{product.concern}</p>
+                    <img src={product.image_url} alt={product.name} />
+                    <a href={product.product_url}>Buy Now</a>
+                </div>
+            ))}
+        </div>
+    );
 };
 
 export default Results;
