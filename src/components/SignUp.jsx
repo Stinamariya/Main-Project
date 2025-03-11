@@ -1,138 +1,135 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import axios from "axios";
+import { useNavigate } from 'react-router-dom';
 
-const SignUp = () => {
+const Signup = () => {
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
-  const [errorMessage, setErrorMessage] = useState("");
-  const [successMessage, setSuccessMessage] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
+  const [cnfPass, setCnfPass] = useState("");
+  const [role, setRole] = useState("user"); // Default role set to 'user'
+  const [error, setError] = useState(""); // For storing error messages
+  const navigate = useNavigate();
 
-  const handleSignUp = async () => {
-    setErrorMessage("");
-    setSuccessMessage("");
-    setIsLoading(true);
+  const handleSignup = async (e) => {
+    e.preventDefault(); // Prevent page refresh on form submission
 
-    if (password !== confirmPassword) {
-      setErrorMessage("Passwords do not match.");
-      setIsLoading(false);
+    // Check if password and confirm password match
+    if (password !== cnfPass) {
+      setError("Passwords do not match!");
       return;
     }
 
     try {
-      const response = await axios.post("http://localhost:3031/SignUp", {
-        username,
-        email,
-        password,
-      });
+      // Send a POST request to the backend to register the user
+      const response = await axios.post("http://localhost:3031/Signup", { username, email, password, role });
 
-      if (response.data.status === "success") {
-        setSuccessMessage("Registration successful! Please log in.");
-        setUsername("");
-        setEmail("");
-        setPassword("");
-        setConfirmPassword("");
+      // Assuming the backend response contains the user's role
+      if (response.data.role === "admin") {
+        alert("Admin signup successful!");
+        // Redirect to admin login page
+        navigate("/admin-login");
       } else {
-        setErrorMessage(response.data.message || "Sign up failed.");
+        alert("User signup successful!");
+        // Redirect to user login page
+        navigate("/login");
       }
     } catch (error) {
-      if (error.response) {
-        console.error("Response Error:", error.response.data);
-        setErrorMessage(error.response.data.message || "Sign up failed.");
-      } else if (error.request) {
-        console.error("No Response from Server:", error.request);
-        setErrorMessage("No response from server. Please check your backend.");
-      } else {
-        console.error("Axios Error:", error.message);
-        setErrorMessage("An unexpected error occurred.");
-      }
-    } finally {
-      setIsLoading(false);
+      console.error("Signup failed:", error);
+      setError(error.response?.data.message || "Signup failed. Please try again.");
     }
   };
 
   return (
-    <div style={styles.body}>
-      <div className="signup-container" style={styles.signupContainer}>
-        <div className="signup-form" style={styles.signupForm}>
-          <center>
-            <h1 style={styles.header}>Create Your Account</h1>
-            <h3 style={styles.subHeader}>Personal Skincare Assistant</h3>
-          </center>
+    <div className="container">
+      <center><h1><b>SIGN UP</b></h1></center>
+      <div className="row">
+        <div className="col col-12">
+          <div className="row g-3">
+            {/* Username Field */}
+            <div className="col col-12">
+              <label htmlFor="username" className="form-label">Name</label>
+              <input 
+                type="text" 
+                className="form-control" 
+                id="username" 
+                value={username} 
+                onChange={(e) => setUsername(e.target.value)} 
+                placeholder="Enter your name"
+                required
+              />
+            </div>
 
-          {errorMessage && <div style={styles.alert}>{errorMessage}</div>}
-          {successMessage && <div style={styles.successAlert}>{successMessage}</div>}
+            {/* Role Dropdown */}
+            <div className="col col-12">
+              <label htmlFor="role" className="form-label">Role</label>
+              <select 
+                name="role" 
+                value={role} 
+                onChange={(e) => setRole(e.target.value)} 
+                className="form-control"
+                required
+              >
+                <option value="admin">Admin</option>
+                <option value="user">User</option>
+              </select>
+            </div>
 
-          <div className="form-group">
-            <label htmlFor="username" style={styles.label}>Username</label>
-            <input
-              type="text"
-              className="form-control"
-              value={username}
-              onChange={(e) => setUsername(e.target.value)}
-              required
-              style={styles.input}
-              placeholder="Enter your username"
-            />
-          </div>
+            {/* Email Field */}
+            <div className="col col-12">
+              <label htmlFor="email" className="form-label">Email</label>
+              <input 
+                type="email" 
+                className="form-control" 
+                id="email" 
+                value={email} 
+                onChange={(e) => setEmail(e.target.value)} 
+                placeholder="Enter your email"
+                required
+              />
+            </div>
 
-          <div className="form-group">
-            <label htmlFor="email" style={styles.label}>Email Address</label>
-            <input
-              type="email"
-              className="form-control"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              required
-              style={styles.input}
-              placeholder="Enter your email"
-            />
-          </div>
+            {/* Password Field */}
+            <div className="col col-12">
+              <label htmlFor="password" className="form-label">Password</label>
+              <input 
+                type="password" 
+                className="form-control" 
+                id="password" 
+                value={password} 
+                onChange={(e) => setPassword(e.target.value)} 
+                placeholder="Enter your password"
+                required
+              />
+            </div>
 
-          <div className="form-group">
-            <label htmlFor="password" style={styles.label}>Password</label>
-            <input
-              type="password"
-              className="form-control"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
-              style={styles.input}
-              placeholder="Enter your password"
-            />
-          </div>
+            {/* Confirm Password Field */}
+            <div className="col col-12">
+              <label htmlFor="cnfPass" className="form-label">Confirm Password</label>
+              <input 
+                type="password" 
+                className="form-control" 
+                id="cnfPass" 
+                value={cnfPass} 
+                onChange={(e) => setCnfPass(e.target.value)} 
+                placeholder="Re-enter your password"
+                required
+              />
+            </div>
 
-          <div className="form-group">
-            <label htmlFor="confirmPassword" style={styles.label}>Confirm Password</label>
-            <input
-              type="password"
-              className="form-control"
-              value={confirmPassword}
-              onChange={(e) => setConfirmPassword(e.target.value)}
-              required
-              style={styles.input}
-              placeholder="Confirm your password"
-            />
-          </div>
+            {/* Error Message */}
+            {error && <div className="col col-12 text-danger">{error}</div>}
 
-          <div className="form-group">
-            <button
-              onClick={handleSignUp}
-              className="btn btn-success"
-              disabled={isLoading}
-              style={styles.button}
-            >
-              {isLoading ? "Signing Up..." : "Sign Up"}
-            </button>
-          </div>
+            {/* Register Button */}
+            <div className="col col-12">
+              <button onClick={handleSignup} className="btn btn-success">Register</button>
+            </div>
 
-          <br />
-          <div className="form-group">
-            <a href="/Login" style={styles.loginLink}>
-              Already have an account? Login here
-            </a>
+            {/* Link to Login */}
+            <div className="col col-12">
+              <center><a href="/login">Back to Login</a></center> 
+            </div>
+            
           </div>
         </div>
       </div>
@@ -140,29 +137,4 @@ const SignUp = () => {
   );
 };
 
-const styles = {
-  body: {
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center',
-    height: '100vh',
-    backgroundColor: '#f8f9fa',
-  },
-  signupContainer: {
-    maxWidth: '400px',
-    width: '100%',
-    padding: '30px',
-    backgroundColor: '#fff',
-    borderRadius: '10px',
-    boxShadow: '0 4px 15px rgba(0, 0, 0, 0.2)',
-  },
-  header: { fontSize: '2.5em', color: '#FF6F61', fontWeight: 'bold' },
-  alert: { color: 'red', marginBottom: '15px' },
-  successAlert: { color: 'green', marginBottom: '15px' },
-  label: { fontSize: '1.1em', fontWeight: 'bold', color: '#555', marginBottom: '5px' },
-  input: { width: '100%', padding: '10px', borderRadius: '5px', border: '1px solid #ddd', marginBottom: '15px' },
-  button: { width: '100%', padding: '10px', borderRadius: '5px', backgroundColor: '#FF6F61', color: '#fff', border: 'none', cursor: 'pointer' },
-  loginLink: { color: '#FF6F61', fontSize: '1em', textDecoration: 'none' },
-};
-
-export default SignUp;
+export default Signup;

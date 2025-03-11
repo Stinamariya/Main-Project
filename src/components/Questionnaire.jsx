@@ -1,7 +1,7 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import axios from "axios";
 
-const Questionnaire = () => {
+function Questionnaire() {
   const [formData, setFormData] = useState({
     Age: "",
     Gender: "",
@@ -19,100 +19,188 @@ const Questionnaire = () => {
     Dark_Spots: "",
   });
 
-  const navigate = useNavigate();
+  const [prediction, setPrediction] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
 
   const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
+    const { name, value } = e.target;
+    setFormData((prevData) => ({
+      ...prevData,
+      [name]: value,
+    }));
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
-    const data = { ...formData };
-
-    // Debugging: Check if all fields are correctly collected
-    console.log("Data being sent:", data);
-
+    setLoading(true);
+    setError("");
+    setPrediction(null);
+  
     try {
-      const response = await fetch("http://127.0.0.1:5000/predict", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(data),
-      });
-
-      const result = await response.json();
-      console.log("Prediction Result:", result);
-
-      if (result.skin_type && result.skin_condition) {
-        // Pass the correct keys to the results page
-        navigate("/results", {
-          state: { predictedSkinType: result.skin_type, predictedSkinCondition: result.skin_condition }
-        });
-      } else {
-        console.error("Error:", result.error);
-      }
-    } catch (error) {
-      console.error("Error during prediction:", error);
+      const response = await axios.post("http://localhost:3031/predict-skin", formData);
+      console.log("Prediction Response:", response.data); // Debugging
+  
+      setPrediction(response.data);
+    } catch (err) {
+      console.error("Error fetching prediction:", err);
+      setError("Error fetching prediction. Please try again.");
     }
+    setLoading(false);
   };
+  
 
   return (
-    <div>
-      <h2>Skin Analysis Questionnaire</h2>
-      <form onSubmit={handleSubmit}>
+    <div style={{ maxWidth: "600px", margin: "0 auto", padding: "1rem" }}>
+      <h1>Personal Skincare Assistant</h1>
+      <h2>Questionnaire</h2>
+      <form onSubmit={handleSubmit} style={{ display: "grid", gap: "1rem" }}>
+        {/* Form fields */}
         <div>
           <label>Age:</label>
           <input type="number" name="Age" value={formData.Age} onChange={handleChange} required />
         </div>
-
-        {/* Gender */}
         <div>
           <label>Gender:</label>
-          {["Male", "Female", "Other"].map((option) => (
-            <label key={option}>
-              <input
-                type="radio"
-                name="Gender"
-                value={option}
-                checked={formData.Gender === option}
-                onChange={handleChange}
-                required
-              />
-              {option}
-            </label>
-          ))}
+          <select name="Gender" value={formData.Gender} onChange={handleChange} required>
+            <option value="">Select</option>
+            <option value="Female">Female</option>
+            <option value="Male">Male</option>
+            <option value="Other">Other</option>
+          </select>
+        </div>
+        <div>
+          <label>Water Intake (Glasses):</label>
+          <input type="number" name="Water_Intake_Glasses" value={formData.Water_Intake_Glasses} onChange={handleChange} required />
+        </div>
+        <div>
+          <label>Diet Quality:</label>
+          <select name="Diet_Quality" value={formData.Diet_Quality} onChange={handleChange} required>
+            <option value="">Select</option>
+            <option value="Healthy">Healthy</option>
+            <option value="Average">Average</option>
+            <option value="Poor">Poor</option>
+          </select>
+        </div>
+        <div>
+          <label>Sleep Hours:</label>
+          <input type="number" name="Sleep_Hours" value={formData.Sleep_Hours} onChange={handleChange} required />
+        </div>
+        <div>
+          <label>Exercise Frequency:</label>
+          <select name="Exercise_Frequency" value={formData.Exercise_Frequency} onChange={handleChange} required>
+            <option value="">Select</option>
+            <option value="Never">Never</option>
+            <option value="Occasionally">Occasionally</option>
+            <option value="Regularly">Regularly</option>
+          </select>
+        </div>
+        <div>
+          <label>Stress Level:</label>
+          <select name="Stress_Level" value={formData.Stress_Level} onChange={handleChange} required>
+            <option value="">Select</option>
+            <option value="Low">Low</option>
+            <option value="Medium">Medium</option>
+            <option value="High">High</option>
+          </select>
+        </div>
+        <div>
+          <label>Sun Exposure:</label>
+          <select name="Sun_Exposure" value={formData.Sun_Exposure} onChange={handleChange} required>
+            <option value="">Select</option>
+            <option value="Low">Low</option>
+            <option value="Medium">Medium</option>
+            <option value="High">High</option>
+          </select>
+        </div>
+        <div>
+          <label>Hydration Level:</label>
+          <select name="Hydration_Level" value={formData.Hydration_Level} onChange={handleChange} required>
+            <option value="">Select</option>
+            <option value="Low">Low</option>
+            <option value="Medium">Medium</option>
+            <option value="High">High</option>
+          </select>
+        </div>
+        <div>
+          <label>Acne History:</label>
+          <select name="Acne_History" value={formData.Acne_History} onChange={handleChange} required>
+            <option value="">Select</option>
+            <option value="Yes">Yes</option>
+            <option value="No">No</option>
+          </select>
+        </div>
+        <div>
+          <label>Redness:</label>
+          <select name="Redness" value={formData.Redness} onChange={handleChange} required>
+            <option value="">Select</option>
+            <option value="Yes">Yes</option>
+            <option value="No">No</option>
+          </select>
+        </div>
+        <div>
+          <label>Sensitivity to Products:</label>
+          <select name="Sensitivity_to_Products" value={formData.Sensitivity_to_Products} onChange={handleChange} required>
+            <option value="">Select</option>
+            <option value="Yes">Yes</option>
+            <option value="No">No</option>
+          </select>
+        </div>
+        <div>
+          <label>Wrinkles/Fine Lines:</label>
+          <select name="Wrinkles_Fine_Lines" value={formData.Wrinkles_Fine_Lines} onChange={handleChange} required>
+            <option value="">Select</option>
+            <option value="Yes">Yes</option>
+            <option value="No">No</option>
+          </select>
+        </div>
+        <div>
+          <label>Dark Spots:</label>
+          <select name="Dark_Spots" value={formData.Dark_Spots} onChange={handleChange} required>
+            <option value="">Select</option>
+            <option value="Yes">Yes</option>
+            <option value="No">No</option>
+          </select>
         </div>
 
-        {/* Other Inputs */}
-        {[
-          { label: "Water Intake (Glasses)", name: "Water_Intake_Glasses", options: ["Less than 4", "4-6", "7-9", "10 or more"] },
-          { label: "Diet Quality", name: "Diet_Quality", options: ["Poor", "Average", "Healthy"] },
-          { label: "Sleep Hours", name: "Sleep_Hours", options: ["Less than 5", "5-6", "7-8", "More than 8"] },
-          { label: "Exercise Frequency", name: "Exercise_Frequency", options: ["Never", "Occasionally", "Regularly"] },
-          { label: "Stress Level", name: "Stress_Level", options: ["Low", "Medium", "High"] },
-          { label: "Sun Exposure", name: "Sun_Exposure", options: ["None", "Low", "Medium", "High"] },
-          { label: "Hydration Level", name: "Hydration_Level", options: ["Low", "Medium", "High"] },
-          { label: "Acne History", name: "Acne_History", options: ["Yes", "No"] },
-          { label: "Redness", name: "Redness", options: ["Yes", "No"] },
-          { label: "Sensitivity to Products", name: "Sensitivity_to_Products", options: ["Yes", "No"] },
-          { label: "Wrinkles/Fine Lines", name: "Wrinkles_Fine_Lines", options: ["Yes", "No"] },
-          { label: "Dark Spots", name: "Dark_Spots", options: ["Yes", "No"] },
-        ].map(({ label, name, options }) => (
-          <div key={name}>
-            <label>{label}:</label>
-            {options.map((option) => (
-              <label key={option}>
-                <input type="radio" name={name} value={option} checked={formData[name] === option} onChange={handleChange} required />
-                {option}
-              </label>
-            ))}
-          </div>
-        ))}
-
-        <button type="submit">Get Prediction</button>
+        <button type="submit">Submit Questionnaire</button>
       </form>
+
+      {loading && <p>Loading prediction...</p>}
+      {error && <p style={{ color: "red" }}>{error}</p>}
+
+      {prediction && (
+        <div>
+          <h2>Prediction Result</h2>
+          <p><strong>Skin Type:</strong> {prediction.skinType}</p>
+          <p><strong>Skin Condition:</strong> {prediction.skinCondition}</p>
+
+          {prediction.recommendedProducts && prediction.recommendedProducts.length > 0 && (
+            <div>
+              <h3>Recommended Products:</h3>
+              <ul style={{ listStyleType: "none", padding: 0 }}>
+                {prediction.recommendedProducts.map((product) => (
+                  <li key={product._id} style={{ marginBottom: "15px", border: "1px solid #ddd", padding: "10px", borderRadius: "5px" }}>
+                    <h4>{product.productName || "Unnamed Product"}</h4>
+                    <p><strong>Concern:</strong> {product.concern || "N/A"}</p>
+                    {product.productPic && (
+                      <img src={product.productPic} alt={product.productName} width="100" style={{ borderRadius: "5px" }} />
+                    )}
+                    <br />
+                    {product.productUrl && (
+                      <a href={product.productUrl} target="_blank" rel="noopener noreferrer" style={{ color: "blue" }}>
+                        View Product
+                      </a>
+                    )}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
+        </div>
+      )}
     </div>
   );
-};
+}
 
 export default Questionnaire;
