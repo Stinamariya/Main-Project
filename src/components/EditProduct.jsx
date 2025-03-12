@@ -7,7 +7,8 @@ const EditProduct = ({ productId, onClose, onUpdate }) => {
     productName: "",
     concern: "",
     productURL: "",
-    imageURL: ""
+    imageURL: "",
+    price:""
   });
 
   // Fetch existing product details
@@ -45,9 +46,70 @@ const EditProduct = ({ productId, onClose, onUpdate }) => {
         <input type="text" name="concern" value={formData.concern} onChange={handleChange} placeholder="Concern" required />
         <input type="text" name="productURL" value={formData.productURL} onChange={handleChange} placeholder="Product URL" required />
         <input type="text" name="imageURL" value={formData.imageURL} onChange={handleChange} placeholder="Image URL" required />
+        <input type="text" name="price" value={formData.Price} onChange={handleChange} placeholder="PriceL" required />
         <button type="submit">Update Product</button>
         <button type="button" onClick={onClose}>Cancel</button>
       </form>
+
+      <style jsx>{`
+        .modal {
+          position: fixed;
+          top: 0;
+          left: 0;
+          right: 0;
+          bottom: 0;
+          background-color: rgba(0, 0, 0, 0.5);
+          display: flex;
+          justify-content: center;
+          align-items: center;
+        }
+
+        form {
+          background-color: white;
+          padding: 20px;
+          border-radius: 8px;
+          width: 400px;
+          box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        h2 {
+          text-align: center;
+          margin-bottom: 20px;
+        }
+
+        input {
+          width: 100%;
+          padding: 10px;
+          margin-bottom: 15px;
+          border-radius: 5px;
+          border: 1px solid #ddd;
+          font-size: 14px;
+        }
+
+        button {
+          width: 100%;
+          padding: 12px;
+          background-color: #4CAF50;
+          color: white;
+          border: none;
+          border-radius: 5px;
+          font-size: 16px;
+          cursor: pointer;
+          transition: background-color 0.3s;
+        }
+
+        button:hover {
+          background-color: #45a049;
+        }
+
+        button[type="button"] {
+          background-color: #f44336;
+        }
+
+        button[type="button"]:hover {
+          background-color: #e53935;
+        }
+      `}</style>
     </div>
   );
 };
