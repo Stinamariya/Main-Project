@@ -46,26 +46,90 @@ function AdminLogin() {
   };
 
   return (
-    <form onSubmit={handleLogin}>
-      <h2>Admin Login</h2>
-      <input
-        type="email"
-        placeholder="Email"
-        value={email}
-        onChange={(e) => setEmail(e.target.value)}
-        required
-      />
-      <input
-        type="password"
-        placeholder="Password"
-        value={password}
-        onChange={(e) => setPassword(e.target.value)}
-        required
-      />
-      <button type="submit" disabled={loading}>
-        {loading ? 'Logging in...' : 'Login'}
-      </button>
-    </form>
+    <div className="login-container">
+      <form onSubmit={handleLogin} className="login-form">
+        <h2>Admin Login</h2>
+        <div className="form-group">
+          <input
+            type="email"
+            placeholder="Email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            required
+          />
+        </div>
+        <div className="form-group">
+          <input
+            type="password"
+            placeholder="Password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            required
+          />
+        </div>
+        <button type="submit" className="btn-login" disabled={loading}>
+          {loading ? 'Logging in...' : 'Login'}
+        </button>
+      </form>
+      <style jsx>{`
+        .login-container {
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          height: 100vh;
+          background-color: #f4f4f4;
+        }
+        .login-form {
+          background-color: white;
+          padding: 2rem;
+          border-radius: 8px;
+          box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+          width: 100%;
+          max-width: 400px;
+        }
+        h2 {
+          text-align: center;
+          margin-bottom: 1.5rem;
+        }
+        .form-group {
+          margin-bottom: 1.5rem;
+        }
+        input {
+          width: 100%;
+          padding: 0.75rem;
+          border: 1px solid #ccc;
+          border-radius: 4px;
+          font-size: 1rem;
+        }
+        input:focus {
+          border-color: #007bff;
+          outline: none;
+        }
+        .btn-login {
+          width: 100%;
+          padding: 0.75rem;
+          background-color: #007bff;
+          color: white;
+          border: none;
+          border-radius: 4px;
+          font-size: 1rem;
+          cursor: pointer;
+        }
+        .btn-login:disabled {
+          background-color: #aaa;
+          cursor: not-allowed;
+        }
+        .btn-login:hover:not(:disabled) {
+          background-color: #0056b3;
+        }
+        @media (max-width: 600px) {
+          .login-form {
+            width: 90%;
+            padding: 1rem;
+          }
+        }
+      `}</style>
+    </div>
   );
 }
 

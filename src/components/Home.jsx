@@ -163,17 +163,74 @@
 
 
 
-import React from 'react';
-import { Link } from 'react-router-dom';
+import React from "react";
+import { Link } from "react-router-dom";
 
 function Home() {
+  const styles = {
+    container: {
+      textAlign: "center",
+      margin: "100px auto",
+      padding: "20px",
+      maxWidth: "500px",
+      backgroundColor: "#f9f9f9",
+      borderRadius: "10px",
+      boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.1)",
+    },
+    title: {
+      fontSize: "26px",
+      color: "#333",
+    },
+    highlight: {
+      color: "#007bff",
+    },
+    text: {
+      fontSize: "18px",
+      color: "#555",
+      marginBottom: "20px",
+    },
+    buttonGroup: {
+      display: "flex",
+      justifyContent: "center",
+      gap: "15px",
+    },
+    button: {
+      padding: "10px 20px",
+      textDecoration: "none",
+      fontSize: "16px",
+      borderRadius: "5px",
+      color: "white",
+      transition: "0.3s",
+    },
+    loginBtn: {
+      backgroundColor: "#007bff",
+    },
+    registerBtn: {
+      backgroundColor: "#28a745",
+    },
+    buttonHover: {
+      opacity: "0.8",
+    },
+  };
+
   return (
-    <div>
-      <h1>Welcome to the Personal Skincare Assistant</h1>
-      <p>Your personalized skincare solutions are just a few clicks away!</p>
-      <Link to="/login">Login</Link> | <Link to="/Signup">Register</Link>
+    <div style={styles.container}>
+      <h1 style={styles.title}>
+        Welcome to <span style={styles.highlight}>Personal Skincare Assistant</span>
+      </h1>
+      <p style={styles.text}>Your personalized skincare solutions are just a few clicks away!</p>
+
+      <div style={styles.buttonGroup}>
+        <Link to="/admin-login" style={{ ...styles.button, ...styles.loginBtn }}>
+          Login
+        </Link>
+        <Link to="/signup" style={{ ...styles.button, ...styles.registerBtn }}>
+          Register
+        </Link>
+      </div>
     </div>
   );
 }
 
 export default Home;
+
