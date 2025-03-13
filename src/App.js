@@ -20,6 +20,9 @@ import Checkout from "./components/Checkout";
 import OrderConfirmation from "./components/OrderConfirmation";
 import Profile from "./components/Profile";
 import OrderSummary from "./components/OrderSummary";
+import OrderManagement from "./components/OrderManagement";
+import ProductManagement from "./components/ProductManagement";
+import UserManagement from "./components/UserManagement";
 
 function App() {
   const role = localStorage.getItem("role");
@@ -53,6 +56,9 @@ function App() {
           <Route path="/profile" element={<Profile />} />
           <Route path="/order-confirmation" element={<OrderConfirmation />} />
           <Route path="/order-summary" element={<OrderSummary />} />
+          <Route path="/ordermanagement" element={<OrderManagement />} />
+          <Route path="/productmanagement" element={<ProductManagement />} />
+          <Route path="/usermanagement" element={<UserManagement />} />
         </Routes>
       </BrowserRouter>
     </CartProvider>

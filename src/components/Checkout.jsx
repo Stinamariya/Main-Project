@@ -9,6 +9,8 @@ function Checkout() {
   const [billingDetails, setBillingDetails] = useState(initialBillingDetails || {});
   const [isFormValid, setIsFormValid] = useState(false); // Track form validity
   const navigate = useNavigate();
+  const selectedProducts = cart.filter((product) => product.selected); 
+
 
   useEffect(() => {
     // Validate the form: all fields should be filled
@@ -73,6 +75,32 @@ function Checkout() {
     // Navigate to the order confirmation page with orderSummary
     navigate("/order-confirmation", { state: { orderSummary } });
   };
+  
+  const handlePaymentSuccess = (paymentData) => {
+    const userId = localStorage.getItem("userId"); // Get userId from local storage or context
+    if (!userId) {
+      alert("User not logged in. Please log in first.");
+      navigate("/login"); // Redirect to login if userId is missing
+      return;
+    }
+  
+    const selectedProducts = cart.filter((product) => product.selected);
+  
+    const orderDetails = {
+      userId, // Include userId
+      cart: selectedProducts,
+      payment: {
+        id: paymentData.id,
+        amount: paymentData.amount,
+        method: paymentData.method,
+        status: "Success",
+      },
+    };
+  
+    // Navigate to the order confirmation page with order details
+    navigate("/order-confirmation", { state: { order: orderDetails } });
+  };
+  
   
   
 

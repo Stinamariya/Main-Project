@@ -5,11 +5,26 @@ function Products() {
   const location = useLocation();
   const navigate = useNavigate();
 
-  // Get recommended products from state or localStorage
-  const { recommendedProducts } = location.state || {};
-  const finalRecommendedProducts = recommendedProducts || JSON.parse(localStorage.getItem("recommendedProducts")) || [];
+  // Retrieve recommended products and prediction results from state or localStorage
+  const { recommendedProducts, skinType, skinCondition } = location.state || {};
+  
+  const finalRecommendedProducts =
+    recommendedProducts || JSON.parse(localStorage.getItem("recommendedProducts")) || [];
 
-  console.log("Final Recommended Products:", finalRecommendedProducts);
+  const predictedSkinType = skinType || localStorage.getItem("predictedSkinType");
+  const predictedSkinCondition = skinCondition || localStorage.getItem("predictedSkinCondition");
+
+  console.log("Predicted Skin Type:", predictedSkinType);
+  console.log("Predicted Skin Condition:", predictedSkinCondition);
+  console.log("All Recommended Products:", finalRecommendedProducts);
+
+  // Filter products based on both skin type and skin condition
+  const filteredProducts = finalRecommendedProducts.filter(
+    (product) =>
+      product.skinType === predictedSkinType && product.concern === predictedSkinCondition
+  );
+
+  console.log("Filtered Products:", filteredProducts);
 
   // Function to add products to cart
   const addToCart = (product) => {
@@ -22,16 +37,27 @@ function Products() {
   return (
     <div style={styles.container}>
       <h1>Recommended Products</h1>
-      {finalRecommendedProducts.length > 0 ? (
+      {filteredProducts.length > 0 ? (
         <ul style={styles.productList}>
-          {finalRecommendedProducts.map((product) => (
+          {filteredProducts.map((product) => (
             <li key={product._id} style={styles.productItem}>
               <h4>{product.productName}</h4>
               <p><strong>Concern:</strong> {product.concern || "N/A"}</p>
-              <p><strong>Price:</strong> ${product.price.toFixed(2)}</p> {/* Display the price */}
-              {product.productPic && <img src={product.productPic} alt={product.productName} style={styles.productImage} />}
+              <p><strong>Price:</strong> ${product.price ? product.price.toFixed(2) : "N/A"}</p>
+              {product.productPic && (
+                <img src={product.productPic} alt={product.productName} style={styles.productImage} />
+              )}
               <br />
-              {product.productUrl && <a href={product.productUrl} target="_blank" rel="noopener noreferrer" style={styles.productLink}>View Product</a>}
+              {product.productUrl && (
+                <a
+                  href={product.productUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  style={styles.productLink}
+                >
+                  View Product
+                </a>
+              )}
               <br />
               <button onClick={() => addToCart(product)} style={styles.addToCartBtn}>
                 Add to Cart
@@ -40,7 +66,7 @@ function Products() {
           ))}
         </ul>
       ) : (
-        <p>No recommended products available.</p>
+        <p>No recommended products available for your skin type and concern.</p>
       )}
 
       <button onClick={() => navigate("/cart")} style={styles.goToCartBtn}>

@@ -90,7 +90,7 @@ function Results() {
       <p><strong>Skin Type:</strong> {prediction.skinType}</p>
       <p><strong>Skin Condition:</strong> {prediction.skinCondition}</p>
 
-      <button className="btn" onClick={() => navigate("/Questionnaire")}>Retake Questionnaire</button>
+      <button className="btn" onClick={() => navigate("/Questionnaire")}>Back</button>
       <button className="btn" onClick={() => navigate("/products", { state: { skinType: prediction.skinType, skinCondition: prediction.skinCondition } })}>
         View Recommended Products
       </button>
