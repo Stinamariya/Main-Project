@@ -1,59 +1,72 @@
-import React from 'react';
-import { Link, useNavigate } from 'react-router-dom'; // Use useNavigate instead of useHistory
+import React from "react";
+import { Link, useNavigate } from "react-router-dom";
 
-const Navbar = () => {
-  const navigate = useNavigate(); // Use navigate for redirection
+function Navbar() {
+  const navigate = useNavigate();
+  const isAuthenticated = localStorage.getItem("token"); // Check if user is logged in
 
   const handleLogout = () => {
-    // Clear any authentication data (e.g., JWT token)
-    localStorage.removeItem('token');  // Assuming you stored JWT token in localStorage
-    sessionStorage.removeItem('token'); // If you used sessionStorage instead
-
-    // Redirect to login page after logout
-    navigate('/Signup'); // Using navigate to redirect
+    localStorage.removeItem("token"); // Remove authentication token
+    navigate("/login"); // Redirect to login page
   };
 
   return (
-    <nav style={navbarStyle}>
-      <div>
-        <Link to="/" style={linkStyle}>
-          <h1>Personal Skincare Assistant</h1>
-        </Link>
-      </div>
-      <div>
-        
-        <button onClick={handleLogout} style={logoutButtonStyle}>Logout</button>
+    <nav style={styles.navbar}>
+      <h2 style={styles.logo}>Skincare Assistant</h2>
+      <div style={styles.links}>
+        <Link to="/" style={styles.link}>Home</Link>
+        <Link to="/products" style={styles.link}>Products</Link>
+        <Link to="/cart" style={styles.link}>Cart</Link>
+
+        {isAuthenticated ? (
+          <button onClick={handleLogout} style={styles.logoutButton}>Logout</button>
+        ) : (
+          <>
+            <Link to="/login" style={styles.link}>Login</Link>
+            <Link to="/signup" style={styles.signupButton}>Signup</Link>
+          </>
+        )}
       </div>
     </nav>
   );
-};
+}
 
-// Styling for the navbar
-const navbarStyle = {
-  display: 'flex',
-  justifyContent: 'space-between',
-  alignItems: 'center',
-  backgroundColor: 'blue',
-  padding: '10px 20px',
-  color: '#fff',
-};
-
-const linkStyle = {
-  color: '#fff',
-  textDecoration: 'none',
-  marginLeft: '15px',
-  fontSize: '18px',
-};
-
-const logoutButtonStyle = {
-  backgroundColor: '#ff6347', // Red color for logout button
-  color: '#fff',
-  border: 'none',
-  padding: '8px 16px',
-  fontSize: '16px',
-  cursor: 'pointer',
-  marginLeft: '15px',
-  borderRadius: '5px',
+const styles = {
+  navbar: {
+    display: "flex",
+    justifyContent: "space-between",
+    alignItems: "center",
+    backgroundColor: "#333",
+    padding: "15px 30px",
+    color: "white",
+  },
+  logo: {
+    fontSize: "1.5rem",
+  },
+  links: {
+    display: "flex",
+    gap: "15px",
+  },
+  link: {
+    color: "white",
+    textDecoration: "none",
+    fontSize: "1rem",
+  },
+  signupButton: {
+    backgroundColor: "#28a745",
+    color: "white",
+    padding: "8px 12px",
+    borderRadius: "5px",
+    textDecoration: "none",
+  },
+  logoutButton: {
+    backgroundColor: "#dc3545",
+    color: "white",
+    padding: "8px 12px",
+    borderRadius: "5px",
+    border: "none",
+    cursor: "pointer",
+  },
 };
 
 export default Navbar;

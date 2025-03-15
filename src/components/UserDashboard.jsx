@@ -1,153 +1,95 @@
-import React, { useState } from 'react';
-import axios from 'axios';
+import React from "react";
+import { Link, useNavigate } from "react-router-dom";
 
-const UserDashboard = () => {
-  const [formData, setFormData] = useState({
-    age: '',
-    gender: '',
-    waterIntake: '',
-    dietQuality: '',
-    sleepHours: '',
-    exerciseFrequency: '',
-    stressLevel: '',
-    sunExposure: '',
-    hydrationLevel: '',
-    acneHistory: '',
-    redness: '',
-    sensitivityToProducts: '',
-    wrinkles: '',
-    darkSpots: '',
-  });
+function UserDashboard() {
+  const navigate = useNavigate();
 
-  const [prediction, setPrediction] = useState(null);
-  const [recommendedProducts, setRecommendedProducts] = useState([]);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
-
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData({
-      ...formData,
-      [name]: value,
-    });
-  };
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    setLoading(true);
-    setError(null);
-
-    try {
-      const response = await axios.post('http://localhost:3031/predict-skin', formData);
-      setPrediction(response.data.prediction);
-      setRecommendedProducts(response.data.recommendedProducts);
-    } catch (error) {
-      console.error('Error fetching user data:', error);
-      setError('An error occurred while predicting your skin type and recommending products.');
-    }
-    setLoading(false);
+  const handleLogout = () => {
+    localStorage.removeItem("token"); // Clear authentication token
+    navigate("/login"); // Redirect to login
   };
 
   return (
-    <div className="dashboard-container">
-      <h1>Skincare Questionnaire</h1>
-      <form onSubmit={handleSubmit} className="form-container">
-        <input
-          type="number"
-          name="age"
-          value={formData.age}
-          onChange={handleChange}
-          placeholder="Age"
-          className="form-input"
-        />
-        {/* Add other input fields for gender, water intake, diet, etc. */}
-        
-        <button type="submit" className="submit-btn">Submit</button>
-      </form>
+    <div style={styles.container}>
+      <h2 style={styles.title}>Welcome to Your Dashboard</h2>
+      <div style={styles.cardContainer}>
+        <Link to="/questionnaire" style={styles.card}>
+          <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRQ5IDuKjZNM2eKTm4Ox_FPrsQhEWSvxllFVQ&s" alt="questionnaire" style={styles.icon} />
+          <h3>Know Your Skin</h3>
+        </Link>
 
-      {loading && <p className="loading-text">Loading...</p>}
-      {error && <p className="error-text">{error}</p>}
+        <Link to="/products" style={styles.card}>
+          <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRQtWiKm9-AT1FZ56aXb7V_EuQKRi-YqI2zKg&s" alt="products" style={styles.icon} />
+          <h3>Recommended Products</h3>
+        </Link>
 
-      {prediction && (
-        <div className="result-container">
-          <h2>Prediction Results</h2>
-          <p><strong>Skin Type:</strong> {prediction.skinType}</p>
-          <p><strong>Skin Condition:</strong> {prediction.skinCondition}</p>
+        <Link to="/myorders" style={styles.card}>
+          <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSq2WzqE_8XWDs1W6dLxfN_2HbGH6Vb5C2u1Q&s" alt="orders" style={styles.icon} />
+          <h3>My Orders</h3>
+        </Link>
 
-          <h3>Recommended Products:</h3>
-          {recommendedProducts.map((product, index) => (
-            <div key={index} className="product-item">
-              <p>{product.name}</p>
-              <a href={product.url} target="_blank" rel="noopener noreferrer" className="product-link">View Product</a>
-            </div>
-          ))}
-        </div>
-      )}
+        <Link to="/profile" style={styles.card}>
+          <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQcCuCOisgxyOypyBi-hRYYV2Onv7KVI6QTVA&s" alt="Profile" style={styles.icon} />
+          <h3>Profile</h3>
+        </Link>
+      </div>
+
       
-      <style jsx>{`
-        .dashboard-container {
-          padding: 20px;
-          font-family: Arial, sans-serif;
-          max-width: 800px;
-          margin: 0 auto;
-          text-align: center;
-        }
-
-        .form-container {
-          display: flex;
-          flex-direction: column;
-          align-items: center;
-          margin-bottom: 20px;
-        }
-
-        .form-input {
-          padding: 10px;
-          margin: 10px;
-          width: 200px;
-          border: 1px solid #ccc;
-          border-radius: 5px;
-        }
-
-        .submit-btn {
-          background-color: #4CAF50;
-          color: white;
-          padding: 10px 20px;
-          border: none;
-          border-radius: 5px;
-          cursor: pointer;
-          transition: background-color 0.3s ease;
-        }
-
-        .submit-btn:hover {
-          background-color: #45a049;
-        }
-
-        .loading-text, .error-text {
-          font-size: 1.2rem;
-          color: #ff0000;
-        }
-
-        .result-container {
-          margin-top: 20px;
-          text-align: left;
-        }
-
-        .product-item {
-          margin: 10px 0;
-        }
-
-        .product-link {
-          color: #4CAF50;
-          text-decoration: none;
-          font-weight: bold;
-        }
-
-        .product-link:hover {
-          text-decoration: underline;
-        }
-      `}</style>
     </div>
   );
+}
+
+const styles = {
+  container: {
+    padding: "30px",
+    textAlign: "center",
+    backgroundColor: "#f4f4f4",
+    minHeight: "100vh",
+  },
+  title: {
+    fontSize: "2rem",
+    marginBottom: "20px",
+    color: "#333",
+  },
+  cardContainer: {
+    display: "flex",
+    justifyContent: "center",
+    flexWrap: "wrap",
+    gap: "20px",
+  },
+  card: {
+    width: "220px",
+    height: "220px",
+    backgroundColor: "#fff",
+    borderRadius: "15px",
+    boxShadow: "0 4px 8px rgba(0,0,0,0.2)",
+    textDecoration: "none",
+    color: "#333",
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
+    justifyContent: "center",
+    transition: "transform 0.3s ease",
+  },
+  cardHover: {
+    transform: "scale(1.05)",
+  },
+  icon: {
+    width: "60px",
+    height: "60px",
+    marginBottom: "10px",
+  },
+  logoutButton: {
+    marginTop: "30px",
+    padding: "12px 20px",
+    backgroundColor: "#dc3545",
+    color: "white",
+    border: "none",
+    borderRadius: "5px",
+    cursor: "pointer",
+    fontSize: "1rem",
+    transition: "background 0.3s",
+  },
 };
 
 export default UserDashboard;

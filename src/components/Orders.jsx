@@ -1,78 +1,133 @@
-import React, { useEffect, useState } from 'react';
-import axios from 'axios';
+// import React, { useEffect, useState } from "react";
 
-const Orders = () => {
-  const [orders, setOrders] = useState([]);
+// function Orders() {
+//   const [order, setOrder] = useState(null);
+//   const userId = localStorage.getItem("userId");
+
+//   useEffect(() => {
+//     const storedOrder = JSON.parse(localStorage.getItem(`order_${userId}`));
+//     setOrder(storedOrder);
+//   }, [userId]);
+
+//   return (
+//     <div>
+//       <h1>Your Order Details</h1>
+//       {order ? (
+//         <div>
+//           <h3>Order ID: {userId}</h3>
+//           <p><strong>Name:</strong> {order.user.name}</p>
+//           <p><strong>Phone:</strong> {order.user.phone}</p>
+//           <p><strong>Address:</strong> {order.user.address}</p>
+//           <p><strong>Payment Method:</strong> {order.paymentMethod}</p>
+//           <h3>Products Ordered:</h3>
+//           <ul>
+//             {order.products.map((product) => (
+//               <li key={product._id}>
+//                 {product.productName} - {product.quantity} x ${product.price} = ${(product.price * product.quantity).toFixed(2)}
+//               </li>
+//             ))}
+//           </ul>
+//           <h3>Total Paid: ${order.totalAmount}</h3>
+//           <p><strong>Payment Status:</strong> {order.paymentStatus}</p>
+//         </div>
+//       ) : (
+//         <p>No orders found.</p>
+//       )}
+//     </div>
+//   );
+// }
+
+// export default Orders;
+
+
+
+
+
+
+
+
+
+
+import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom"; 
+
+function Orders() {
+  const [order, setOrder] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
+  const userId = localStorage.getItem("userId");
+  const navigate = useNavigate();
 
   useEffect(() => {
-    axios.get('/api/orders', {
-      headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
-    })
-    .then(response => {
-      setOrders(response.data);
-    })
-    .catch(error => {
-      console.error('Error fetching orders:', error);
-    });
-  }, []);
+    const storedOrder = JSON.parse(localStorage.getItem(`order_${userId}`));
+    setOrder(storedOrder);
+  }, [userId]);
+  const navigateToOrderConfirm = () => {
+    navigate("/orderconfirm");  // Navigate to the order confirm page
+  };
 
   return (
-    <div className="orders">
-      <h2>Your Orders</h2>
-      {orders.length > 0 ? (
-        <ul>
-          {orders.map(order => (
-            <li key={order.id} className="order-item">
-              <p><strong>Order ID:</strong> {order.id}</p>
-              <p><strong>Items:</strong> {order.items.join(', ')}</p>
-              {/* Render other order details */}
-            </li>
-          ))}
-        </ul>
+    <div style={styles.container}>
+      <h1 style={styles.heading}>Your Order Details</h1>
+      {order ? (
+        <div style={styles.orderDetails}>
+          <h3>Order ID: {userId}</h3>
+          <p><strong>Name:</strong> {order.user.name}</p>
+          <p><strong>Phone:</strong> {order.user.phone}</p>
+          <p><strong>Address:</strong> {order.user.address}</p>
+          <p><strong>Payment Method:</strong> {order.paymentMethod}</p>
+          
+          <h3>Products Ordered:</h3>
+          <ul style={styles.productList}>
+            {order.products.map((product) => (
+              <li key={product._id} style={styles.productItem}>
+                {product.productName} - {product.quantity} x ${product.price} = ${(product.price * product.quantity).toFixed(2)}
+              </li>
+            ))}
+          </ul>
+          
+          <h3>Total Paid: ${order.totalAmount}</h3>
+          <p><strong>Payment Status:</strong> {order.paymentStatus}</p>
+          <button onClick={navigateToOrderConfirm} style={styles.button}>
+            Go to Order Confirmation
+          </button>
+        </div>
       ) : (
         <p>No orders found.</p>
       )}
-
-      <style jsx>{`
-        .orders {
-          padding: 20px;
-          font-family: Arial, sans-serif;
-        }
-
-        h2 {
-          font-size: 2rem;
-          color: #333;
-          margin-bottom: 20px;
-        }
-
-        ul {
-          list-style-type: none;
-          padding: 0;
-        }
-
-        .order-item {
-          background-color: #f8f8f8;
-          border: 1px solid #ddd;
-          border-radius: 5px;
-          padding: 15px;
-          margin-bottom: 15px;
-          box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-        }
-
-        .order-item p {
-          margin: 5px 0;
-        }
-
-        .order-item strong {
-          font-weight: bold;
-        }
-
-        p {
-          color: #777;
-        }
-      `}</style>
     </div>
   );
+}
+
+// Inline Styles
+const styles = {
+  container: {
+    padding: "20px",
+    fontFamily: "Arial, sans-serif",
+    color: "#333",
+  },
+  heading: {
+    textAlign: "center",
+    color: "#007BFF",
+    marginBottom: "20px",
+  },
+  orderDetails: {
+    backgroundColor: "#f9f9f9",
+    padding: "20px",
+    borderRadius: "8px",
+    border: "1px solid #ddd",
+    width: "80%",
+    margin: "0 auto",
+  },
+  productList: {
+    listStyleType: "none",
+    paddingLeft: "0",
+  },
+  productItem: {
+    padding: "10px 0",
+    borderBottom: "1px solid #ddd",
+  },
 };
 
 export default Orders;
+

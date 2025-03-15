@@ -1,143 +1,272 @@
+// import React, { useState, useEffect } from "react";
+
+// function Cart() {
+//   const [cart, setCart] = useState([]);
+//   const [selectedItems, setSelectedItems] = useState({});
+//   const userId = localStorage.getItem("userId");
+
+//   useEffect(() => {
+//     const storedCart = JSON.parse(localStorage.getItem(`cart_${userId}`)) || [];
+//     const initialSelection = storedCart.reduce((acc, product) => {
+//       acc[product._id] = { selected: false, quantity: 1 };
+//       return acc;
+//     }, {});
+//     setCart(storedCart);
+//     setSelectedItems(initialSelection);
+//   }, [userId]);
+
+//   // Handle selection toggle
+//   const handleSelectItem = (productId) => {
+//     setSelectedItems((prev) => ({
+//       ...prev,
+//       [productId]: { ...prev[productId], selected: !prev[productId].selected },
+//     }));
+//   };
+
+//   // Handle quantity change
+//   const handleQuantityChange = (productId, newQuantity) => {
+//     if (newQuantity < 1) return; // Prevent quantity from going below 1
+//     setSelectedItems((prev) => ({
+//       ...prev,
+//       [productId]: { ...prev[productId], quantity: newQuantity },
+//     }));
+//   };
+
+//   // Proceed to checkout
+//   const handleCheckout = () => {
+//     const selectedProducts = cart
+//       .filter((product) => selectedItems[product._id]?.selected)
+//       .map((product) => ({
+//         ...product,
+//         quantity: selectedItems[product._id].quantity,
+//       }));
+
+//     if (selectedProducts.length === 0) {
+//       alert("Please select at least one item to checkout!");
+//       return;
+//     }
+
+//     localStorage.setItem(`checkout_${userId}`, JSON.stringify(selectedProducts));
+//     window.location.href = "/checkout"; // Redirect to checkout page
+//   };
+
+//   return (
+//     <div>
+//       <h1>Your Cart</h1>
+//       {cart.length > 0 ? (
+//         <>
+//           <ul>
+//             {cart.map((product) => (
+//               <li key={product._id} style={{ marginBottom: "10px", border: "1px solid #ccc", padding: "10px" }}>
+//                 <input
+//                   type="checkbox"
+//                   checked={selectedItems[product._id]?.selected || false}
+//                   onChange={() => handleSelectItem(product._id)}
+//                 />
+//                 <h4>{product.productName}</h4>
+//                 <p><strong>Concern:</strong> {product.concern || "N/A"}</p>
+//                 <p><strong>Price:</strong> ${product.price ? product.price.toFixed(2) : "N/A"}</p>
+//                 <div>
+//                   <button onClick={() => handleQuantityChange(product._id, selectedItems[product._id].quantity - 1)}>-</button>
+//                   <span> {selectedItems[product._id]?.quantity || 1} </span>
+//                   <button onClick={() => handleQuantityChange(product._id, selectedItems[product._id].quantity + 1)}>+</button>
+//                 </div>
+//                 {product.productPic && (
+//                   <img src={product.productPic} alt={product.productName} style={{ width: "100px", height: "100px" }} />
+//                 )}
+//                 {product.productUrl && (
+//                   <a href={product.productUrl} target="_blank" rel="noopener noreferrer">View Product</a>
+//                 )}
+//               </li>
+//             ))}
+//           </ul>
+//           <h3>
+//             Total: $
+//             {cart
+//               .filter((product) => selectedItems[product._id]?.selected)
+//               .reduce((sum, product) => sum + (product.price || 0) * (selectedItems[product._id]?.quantity || 1), 0)
+//               .toFixed(2)}
+//           </h3>
+//           <button onClick={handleCheckout} style={{ padding: "10px", background: "green", color: "white" }}>
+//             Proceed to Checkout
+//           </button>
+//         </>
+//       ) : (
+//         <p>Your cart is empty.</p>
+//       )}
+//     </div>
+//   );
+// }
+
+// export default Cart;
+
+
+
+
+
+
+
+
+
+
+
+
+
 import React, { useState, useEffect } from "react";
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from "react-router-dom";
 
 function Cart() {
   const [cart, setCart] = useState([]);
+  const [selectedItems, setSelectedItems] = useState({});
   const navigate = useNavigate();
+  const userId = localStorage.getItem("userId");
 
   useEffect(() => {
-    // Fetch cart from localStorage on component mount
-    const storedCart = JSON.parse(localStorage.getItem("cart")) || [];
-    console.log("Cart loaded from localStorage: ", storedCart);
-    setCart(storedCart);
-  }, []);
+    try {
+      const storedCart = JSON.parse(localStorage.getItem(`cart_${userId}`)) || [];
+      const initialSelection = storedCart.reduce((acc, product) => {
+        acc[product._id] = { selected: false, quantity: 1 };
+        return acc;
+      }, {});
+      setCart(storedCart);
+      setSelectedItems(initialSelection);
+    } catch (error) {
+      console.error("Error loading cart from localStorage:", error);
+    }
+  }, [userId]);
 
-  const removeFromCart = (productId) => {
-    const updatedCart = cart.filter(product => product._id !== productId);
-    setCart(updatedCart);
-    localStorage.setItem("cart", JSON.stringify(updatedCart)); // Update localStorage
-    console.log("Cart updated: ", updatedCart);
+  const handleSelectItem = (productId) => {
+    setSelectedItems((prev) => ({
+      ...prev,
+      [productId]: { ...prev[productId], selected: !prev[productId].selected },
+    }));
   };
 
-  const proceedToOrderSummary = () => {
-    // Navigate to Order Summary with cart data passed through state
-    navigate("/order-summary", { state: { cart } });
+  const handleQuantityChange = (productId, newQuantity) => {
+    if (newQuantity < 1) return;
+    setSelectedItems((prev) => ({
+      ...prev,
+      [productId]: { ...prev[productId], quantity: newQuantity },
+    }));
   };
 
-  // Log cart to track any unexpected changes
-  useEffect(() => {
-    console.log("Current cart state: ", cart);
-  }, [cart]);
+  const handleCheckout = () => {
+    const selectedProducts = cart
+      .filter((product) => selectedItems[product._id]?.selected)
+      .map((product) => ({
+        ...product,
+        quantity: selectedItems[product._id].quantity,
+      }));
+
+    if (selectedProducts.length === 0) {
+      alert("Please select at least one item to checkout!");
+      return;
+    }
+
+    localStorage.setItem(`checkout_${userId}`, JSON.stringify(selectedProducts));
+    navigate("/checkout");
+  };
 
   return (
-    <div className="cart-container">
+    <div>
       <h1>Your Cart</h1>
       {cart.length > 0 ? (
-        <ul className="cart-items">
-          {cart.map((product) => (
-            <li key={product._id} className="cart-item">
-              <h4>{product.productName}</h4>
-              <p><strong>Concern:</strong> {product.concern || "N/A"}</p>
-              {product.productPic && <img src={product.productPic} alt={product.productName} className="product-image" />}
-              <br />
-              <button onClick={() => removeFromCart(product._id)} className="remove-button">
-                Remove from Cart
-              </button>
-            </li>
-          ))}
-        </ul>
+        <>
+          <ul>
+            {cart.map((product) => (
+              <li key={product._id} style={{ marginBottom: "10px", border: "1px solid #ccc", padding: "10px" }}>
+                <input
+                  type="checkbox"
+                  checked={selectedItems[product._id]?.selected || false}
+                  onChange={() => handleSelectItem(product._id)}
+                />
+                <h4>{product.productName}</h4>
+                <p><strong>Concern:</strong> {product.concern || "N/A"}</p>
+                <p><strong>Price:</strong> ${product.price ? product.price.toFixed(2) : "N/A"}</p>
+                <div>
+                  <button onClick={() => handleQuantityChange(product._id, selectedItems[product._id].quantity - 1)}>-</button>
+                  <span> {selectedItems[product._id]?.quantity || 1} </span>
+                  <button onClick={() => handleQuantityChange(product._id, selectedItems[product._id].quantity + 1)}>+</button>
+                </div>
+                {product.productPic && (
+                  <img src={product.productPic} alt={product.productName} style={{ width: "100px", height: "100px" }} />
+                )}
+                {product.productUrl && (
+                  <a href={product.productUrl} target="_blank" rel="noopener noreferrer">View Product</a>
+                )}
+              </li>
+            ))}
+          </ul>
+          <h3>
+            Total: $
+            {cart
+              .filter((product) => selectedItems[product._id]?.selected)
+              .reduce((sum, product) => sum + (product.price || 0) * (selectedItems[product._id]?.quantity || 1), 0)
+              .toFixed(2)}
+          </h3>
+          <button onClick={handleCheckout} style={{ padding: "10px", background: "green", color: "white" }}>
+            Proceed to Checkout
+          </button>
+        </>
       ) : (
         <p>Your cart is empty.</p>
       )}
-      {cart.length > 0 && (
-        <button onClick={proceedToOrderSummary} className="checkout-button">
-          Proceed to Order
-        </button>
-      )}
-
-      <style jsx>{`
-        .cart-container {
-          max-width: 1200px;
-          margin: 0 auto;
-          padding: 20px;
-          text-align: center;
-        }
-
-        .cart-container h1 {
-          font-size: 2.5rem;
-          color: #343a40;
-        }
-
-        .cart-items {
-          list-style-type: none;
-          padding: 0;
-          margin: 0;
-        }
-
-        .cart-item {
-          margin-bottom: 15px;
-          border: 1px solid #ddd;
-          padding: 10px;
-          border-radius: 5px;
-          box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-          text-align: left;
-          display: flex;
-          flex-direction: column;
-          align-items: center;
-          background-color: #f9f9f9;
-        }
-
-        .cart-item h4 {
-          font-size: 1.5rem;
-          color: #007bff;
-        }
-
-        .cart-item p {
-          font-size: 1.1rem;
-          color: #555;
-        }
-
-        .product-image {
-          max-width: 100px;
-          margin-top: 10px;
-          border-radius: 5px;
-          object-fit: cover;
-        }
-
-        .remove-button, .checkout-button {
-          padding: 10px 20px;
-          border: none;
-          border-radius: 5px;
-          color: white;
-          font-size: 1rem;
-          cursor: pointer;
-        }
-
-        .remove-button {
-          background-color: red;
-          margin-top: 10px;
-        }
-
-        .remove-button:hover {
-          background-color: darkred;
-        }
-
-        .checkout-button {
-          background-color: blue;
-          margin-top: 20px;
-        }
-
-        .checkout-button:hover {
-          background-color: darkblue;
-        }
-
-        .cart-container p {
-          font-size: 1.2rem;
-          color: #777;
-        }
-      `}</style>
     </div>
   );
 }
+
+// Inline CSS styles
+const styles = {
+  container: {
+    padding: "20px",
+    maxWidth: "600px",
+    margin: "auto",
+  },
+  list: {
+    listStyle: "none",
+    padding: 0,
+  },
+  productCard: {
+    marginBottom: "10px",
+    border: "1px solid #ccc",
+    padding: "10px",
+    borderRadius: "8px",
+  },
+  checkbox: {
+    marginRight: "10px",
+  },
+  quantityControl: {
+    display: "flex",
+    alignItems: "center",
+    gap: "10px",
+  },
+  button: {
+    padding: "5px 10px",
+    cursor: "pointer",
+    border: "none",
+    backgroundColor: "#ddd",
+    borderRadius: "5px",
+  },
+  image: {
+    width: "100px",
+    height: "100px",
+    marginTop: "10px",
+  },
+  link: {
+    display: "block",
+    marginTop: "5px",
+    color: "blue",
+    textDecoration: "none",
+  },
+  checkoutButton: {
+    padding: "10px",
+    background: "green",
+    color: "white",
+    border: "none",
+    cursor: "pointer",
+    borderRadius: "5px",
+    marginTop: "10px",
+  },
+};
 
 export default Cart;

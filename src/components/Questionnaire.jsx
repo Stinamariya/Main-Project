@@ -1,228 +1,3 @@
-// import React, { useState } from "react";
-// import axios from "axios";
-// import { useNavigate } from "react-router-dom";
-
-// function Questionnaire() {
-  
-//   const navigate = useNavigate(); // Initialize navigate function
-
-  
-//   const [formData, setFormData] = useState({
-//     Age: "",
-//     Gender: "",
-//     Water_Intake_Glasses: "",
-//     Diet_Quality: "",
-//     Sleep_Hours: "",
-//     Exercise_Frequency: "",
-//     Stress_Level: "",
-//     Sun_Exposure: "",
-//     Hydration_Level: "",
-//     Acne_History: "",
-//     Redness: "",
-//     Sensitivity_to_Products: "",
-//     Wrinkles_Fine_Lines: "",
-//     Dark_Spots: "",
-//   });
-
-//   const [prediction, setPrediction] = useState(null);
-//   const [loading, setLoading] = useState(false);
-//   const [error, setError] = useState("");
-
-//   const handleChange = (e) => {
-//     const { name, value } = e.target;
-//     setFormData((prevData) => ({
-//       ...prevData,
-//       [name]: value,
-//     }));
-//   };
-
-  // const handleSubmit = async (e) => {
-  //   e.preventDefault();
-  //   setLoading(true);
-  //   setError("");
-  //   setPrediction(null);
-  
-  //   try {
-  //     const response = await axios.post("http://localhost:3031/predict-skin", formData);
-  //     console.log("Prediction Response:", response.data); // Debugging
-      
-  
-  //     setPrediction(response.data);
-  //   } catch (err) {
-  //     console.error("Error fetching prediction:", err);
-  //     setError("Error fetching prediction. Please try again.");
-  //   }
-  //   setLoading(false);
-  // };
-  
-
-  // return (
-  //   <div style={{ maxWidth: "600px", margin: "0 auto", padding: "1rem" }}>
-  //     <h1>Personal Skincare Assistant</h1>
-  //     <h2>Questionnaire</h2>
-  //     <form onSubmit={handleSubmit} style={{ display: "grid", gap: "1rem" }}>
-  //       {/* Form fields */}
-  //       <div>
-  //         <label>Age:</label>
-  //         <input type="number" name="Age" value={formData.Age} onChange={handleChange} required />
-  //       </div>
-  //       <div>
-  //         <label>Gender:</label>
-  //         <select name="Gender" value={formData.Gender} onChange={handleChange} required>
-  //           <option value="">Select</option>
-  //           <option value="Female">Female</option>
-  //           <option value="Male">Male</option>
-  //           <option value="Other">Other</option>
-  //         </select>
-  //       </div>
-  //       <div>
-  //         <label>Water Intake (Glasses):</label>
-  //         <input type="number" name="Water_Intake_Glasses" value={formData.Water_Intake_Glasses} onChange={handleChange} required />
-  //       </div>
-  //       <div>
-  //         <label>Diet Quality:</label>
-  //         <select name="Diet_Quality" value={formData.Diet_Quality} onChange={handleChange} required>
-  //           <option value="">Select</option>
-  //           <option value="Healthy">Healthy</option>
-  //           <option value="Average">Average</option>
-  //           <option value="Poor">Poor</option>
-  //         </select>
-  //       </div>
-  //       <div>
-  //         <label>Sleep Hours:</label>
-  //         <input type="number" name="Sleep_Hours" value={formData.Sleep_Hours} onChange={handleChange} required />
-  //       </div>
-  //       <div>
-  //         <label>Exercise Frequency:</label>
-  //         <select name="Exercise_Frequency" value={formData.Exercise_Frequency} onChange={handleChange} required>
-  //           <option value="">Select</option>
-  //           <option value="Never">Never</option>
-  //           <option value="Occasionally">Occasionally</option>
-  //           <option value="Regularly">Regularly</option>
-  //         </select>
-  //       </div>
-  //       <div>
-  //         <label>Stress Level:</label>
-  //         <select name="Stress_Level" value={formData.Stress_Level} onChange={handleChange} required>
-  //           <option value="">Select</option>
-  //           <option value="Low">Low</option>
-  //           <option value="Medium">Medium</option>
-  //           <option value="High">High</option>
-  //         </select>
-  //       </div>
-  //       <div>
-  //         <label>Sun Exposure:</label>
-  //         <select name="Sun_Exposure" value={formData.Sun_Exposure} onChange={handleChange} required>
-  //           <option value="">Select</option>
-  //           <option value="Low">Low</option>
-  //           <option value="Medium">Medium</option>
-  //           <option value="High">High</option>
-  //         </select>
-  //       </div>
-  //       <div>
-  //         <label>Hydration Level:</label>
-  //         <select name="Hydration_Level" value={formData.Hydration_Level} onChange={handleChange} required>
-  //           <option value="">Select</option>
-  //           <option value="Low">Low</option>
-  //           <option value="Medium">Medium</option>
-  //           <option value="High">High</option>
-  //         </select>
-  //       </div>
-  //       <div>
-  //         <label>Acne History:</label>
-  //         <select name="Acne_History" value={formData.Acne_History} onChange={handleChange} required>
-  //           <option value="">Select</option>
-  //           <option value="Yes">Yes</option>
-  //           <option value="No">No</option>
-  //         </select>
-  //       </div>
-  //       <div>
-  //         <label>Redness:</label>
-  //         <select name="Redness" value={formData.Redness} onChange={handleChange} required>
-  //           <option value="">Select</option>
-  //           <option value="Yes">Yes</option>
-  //           <option value="No">No</option>
-  //         </select>
-  //       </div>
-  //       <div>
-  //         <label>Sensitivity to Products:</label>
-  //         <select name="Sensitivity_to_Products" value={formData.Sensitivity_to_Products} onChange={handleChange} required>
-  //           <option value="">Select</option>
-  //           <option value="Yes">Yes</option>
-  //           <option value="No">No</option>
-  //         </select>
-  //       </div>
-  //       <div>
-  //         <label>Wrinkles/Fine Lines:</label>
-  //         <select name="Wrinkles_Fine_Lines" value={formData.Wrinkles_Fine_Lines} onChange={handleChange} required>
-  //           <option value="">Select</option>
-  //           <option value="Yes">Yes</option>
-  //           <option value="No">No</option>
-  //         </select>
-  //       </div>
-  //       <div>
-  //         <label>Dark Spots:</label>
-  //         <select name="Dark_Spots" value={formData.Dark_Spots} onChange={handleChange} required>
-  //           <option value="">Select</option>
-  //           <option value="Yes">Yes</option>
-  //           <option value="No">No</option>
-  //         </select>
-  //       </div>
-
-  //       <button type="submit">Submit Questionnaire</button>
-  //     </form>
-
-  //     {loading && <p>Loading prediction...</p>}
-  //     {error && <p style={{ color: "red" }}>{error}</p>}
-
-  //     {prediction && (
-  //       <div>
-  //         <h2>Prediction Result</h2>
-  //         <p><strong>Skin Type:</strong> {prediction.skinType}</p>
-  //         <p><strong>Skin Condition:</strong> {prediction.skinCondition}</p>
-
-//           {prediction.recommendedProducts && prediction.recommendedProducts.length > 0 && (
-//             <div>
-//               <h3>Recommended Products:</h3>
-//               <ul style={{ listStyleType: "none", padding: 0 }}>
-//                 {prediction.recommendedProducts.map((product) => (
-//                   <li key={product._id} style={{ marginBottom: "15px", border: "1px solid #ddd", padding: "10px", borderRadius: "5px" }}>
-//                     <h4>{product.productName || "Unnamed Product"}</h4>
-//                     <p><strong>Concern:</strong> {product.concern || "N/A"}</p>
-//                     {product.productPic && (
-//                       <img src={product.productPic} alt={product.productName} width="100" style={{ borderRadius: "5px" }} />
-//                     )}
-//                     <br />
-//                     {product.productUrl && (
-//                       <a href={product.productUrl} target="_blank" rel="noopener noreferrer" style={{ color: "blue" }}>
-//                         View Product
-//                       </a>
-//                     )}
-//                   </li>
-//                 ))}
-//               </ul>
-//             </div>
-//           )}
-//         </div>
-//       )}
-//     </div>
-//   );
-// }
-
-// export default Questionnaire;
-
-
-
-
-
-
-
-
-
-
-
-
-
 import React, { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
@@ -262,31 +37,35 @@ function Questionnaire() {
 
   // Submit form data and fetch prediction
   const handleSubmit = async (e) => {
-    e.preventDefault();
-    setLoading(true);
-    setError("");
-    setPrediction(null);
-
+    e.preventDefault(); // Prevent form refresh
+    const userId = localStorage.getItem("userId"); // Get userId from localStorage
+    if (!userId) {
+      console.error("User ID is not available");
+      return;
+    }
+  
+    const data = {
+      ...formData,
+      userId, // Add the userId to the request payload
+    };
+  
     try {
-      const response = await axios.post(
-        "http://localhost:3031/predict-skin",
-        formData
-      );
-      console.log("Prediction Response:", response.data);
+      setLoading(true);
+      const response = await axios.post("http://localhost:3031/predict-skin", data);
       setPrediction(response.data);
-
-      // Navigate to the result page with prediction data
+      setLoading(false);
+  
+      // Navigate to results page and pass the prediction as state
       navigate("/results", { state: { prediction: response.data } });
     } catch (err) {
-      console.error("Error fetching prediction:", err);
-      setError("Error fetching prediction. Please try again.");
+      setError("An error occurred while fetching prediction.");
+      setLoading(false);
     }
-    setLoading(false);
   };
-
+  
+  
   return (
     <div style={styles.container}>
-      
       <h2>Questionnaire</h2>
       <form onSubmit={handleSubmit} style={styles.form}>
         {/* Age Input */}
@@ -604,7 +383,7 @@ function Questionnaire() {
           </div>
         </div>
 
-        {/* Sensitivity to Products */}
+        {/* Sensitivity */}
         <div style={styles.inputGroup}>
           <label>Sensitivity to Products:</label>
           <div style={styles.radioGroup}>
@@ -686,88 +465,63 @@ function Questionnaire() {
         </div>
 
         {/* Submit Button */}
-        <button type="submit" style={styles.submitButton}>
-          {loading ? "Loading..." : "Submit"}
-        </button>
+        <div style={styles.buttonContainer}>
+          <button type="submit" disabled={loading} style={styles.submitButton}>
+            {loading ? "Loading..." : "Submit"}
+          </button>
+        </div>
 
         {/* Error Message */}
-        {error && <p style={styles.error}>{error}</p>}
+        {error && <div style={styles.error}>{error}</div>}
       </form>
     </div>
   );
 }
 
-// CSS-in-JS styles
 const styles = {
   container: {
-    backgroundColor: "#f4f4f9",
-    padding: "30px",
-    borderRadius: "10px",
-    maxWidth: "600px",
+    marginTop: "30px",
+    maxWidth: "800px",
     margin: "0 auto",
-    fontFamily: "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif",
-    boxShadow: "0px 4px 12px rgba(0, 0, 0, 0.1)",
-  },
-  title: {
-    textAlign: "center",
-    fontSize: "24px",
-    color: "#333",
-    marginBottom: "20px",
+    padding: "20px",
+    backgroundColor: "#f8f8f8",
+    borderRadius: "10px",
+    boxShadow: "0 0 15px rgba(0, 0, 0, 0.1)",
   },
   form: {
     display: "flex",
     flexDirection: "column",
-    gap: "15px",
   },
   inputGroup: {
-    display: "flex",
-    flexDirection: "column",
-    gap: "5px",
-  },
-  label: {
-    fontSize: "16px",
-    color: "#333",
+    marginBottom: "20px",
   },
   input: {
-    padding: "12px",
+    padding: "10px",
     fontSize: "14px",
     borderRadius: "5px",
     border: "1px solid #ddd",
-    outline: "none",
-    transition: "0.3s",
   },
   radioGroup: {
     display: "flex",
-    gap: "15px",
-    alignItems: "center",
+    flexDirection: "column",
   },
-  radioLabel: {
-    fontSize: "14px",
-    color: "#333",
-  },
-  radioInput: {
-    marginRight: "5px",
+  buttonContainer: {
+    marginTop: "20px",
   },
   submitButton: {
-    padding: "12px",
-    fontSize: "16px",
+    padding: "10px 20px",
     backgroundColor: "#4CAF50",
     color: "#fff",
     border: "none",
     borderRadius: "5px",
     cursor: "pointer",
-    transition: "0.3s",
-  },
-  submitButtonHovered: {
-    backgroundColor: "#45a049",
+    fontSize: "16px",
   },
   error: {
+    marginTop: "20px",
     color: "red",
     fontSize: "14px",
-    textAlign: "center",
   },
 };
-
-
 
 export default Questionnaire;

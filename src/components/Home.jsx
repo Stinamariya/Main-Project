@@ -1,158 +1,108 @@
+// import React from "react";
 // import { useNavigate } from "react-router-dom";
-// import { motion } from "framer-motion";
 
-// const Home = () => {
+// function Home() {
 //   const navigate = useNavigate();
 
 //   return (
-//     <div style={styles.homeContainer}>
-//       <div style={styles.overlay}></div>
-
-//       <h1 style={styles.appName}>Personal Skincare Assistant</h1>
-
-//       <motion.div
-//         style={styles.contentBox}
-//         initial={{ opacity: 0, y: 20 }}
-//         animate={{ opacity: 1, y: 0 }}
-//         transition={{ duration: 0.8 }}
-//       >
-//         <h2 style={styles.title}>Your Personalized Skincare Guide</h2>
-//         <p style={styles.description}>
-//           Discover skincare solutions tailored just for you.
+//     <div style={styles.container}>
+//       {/* Hero Section */}
+//       <div style={styles.hero}>
+//         <h1 style={styles.title}>Welcome to Personal Skincare Assistant</h1>
+//         <p style={styles.subtitle}>
+//           Get personalized skincare recommendations based on your skin type and lifestyle.
 //         </p>
+//         <button style={styles.button} onClick={() => navigate("/questionnaire")}>
+//           Start Skin Analysis
+//         </button>
+//       </div>
 
-//         <div style={styles.buttonContainer}>
-//           {/* Sign Up Button */}
-//           <MotionButton 
-//             style={styles.getStartedBtn} 
-//             onClick={() => navigate("/SignUp")} 
-//             label="Get Started"
-//           />
-
-//           {/* User Login Button */}
-//           <MotionButton 
-//             style={styles.loginBtn} 
-//             onClick={() => navigate("/login")} 
-//             label="User Login"
-//           />
-
-//           {/* Admin Login Button */}
-//           <MotionButton 
-//             style={styles.adminLoginBtn} 
-//             onClick={() => navigate("/admin/login")} 
-//             label="Admin Login"
-//           />
+//       {/* Features Section */}
+//       <div style={styles.features}>
+//         <h2 style={styles.sectionTitle}>Why Choose Us?</h2>
+//         <div style={styles.featureList}>
+//           <div style={styles.featureItem}>
+//             <h3>✨ AI-Powered Skin Analysis</h3>
+//             <p>Our smart AI analyzes your skin condition based on your inputs.</p>
+//           </div>
+//           <div style={styles.featureItem}>
+//             <h3>🛍️ Personalized Product Recommendations</h3>
+//             <p>Get the best skincare products tailored to your needs.</p>
+//           </div>
+//           <div style={styles.featureItem}>
+//             <h3>📊 Track Your Skin Progress</h3>
+//             <p>Monitor changes in your skin over time with our progress tracker.</p>
+//           </div>
 //         </div>
-//       </motion.div>
+//       </div>
+
+//       {/* Call to Action */}
+//       <div style={styles.cta}>
+//         <h2>Ready to Transform Your Skincare Routine?</h2>
+//         <button style={styles.button} onClick={() => navigate("/questionnaire")}>
+//           Take the Quiz
+//         </button>
+//       </div>
 //     </div>
 //   );
-// };
+// }
 
-// // Reusable MotionButton component
-// const MotionButton = ({ style, onClick, label }) => (
-//   <motion.button
-//     style={style}
-//     whileHover={{ scale: 1.1 }}
-//     whileTap={{ scale: 0.95 }}
-//     onClick={onClick}
-//     aria-label={label}
-//   >
-//     {label}
-//   </motion.button>
-// );
-
-// // Styles
+// // Simple Inline Styles
 // const styles = {
-//   homeContainer: {
-//     display: "flex",
-//     flexDirection: "column",
-//     justifyContent: "center",
-//     alignItems: "center",
-//     minHeight: "100vh",
-//     background: "url('/images/skincare-bg.jpg') no-repeat center center",
-//     backgroundSize: "cover",
+//   container: {
+//     fontFamily: "Arial, sans-serif",
 //     textAlign: "center",
 //     padding: "20px",
-//     position: "relative",
-//     color: "#fff",
 //   },
-//   overlay: {
-//     position: "absolute",
-//     top: 0,
-//     left: 0,
-//     width: "100%",
-//     height: "100%",
-//     background: "rgba(236, 78, 11, 0.5)",
-//   },
-//   appName: {
-//     fontSize: "2.5rem",
-//     fontWeight: "bold",
-//     color: "#fff",
-//     marginBottom: "20px",
-//     position: "relative",
-//     zIndex: 2,
-//   },
-//   contentBox: {
-//     background: "#fff",
-//     padding: "40px",
+//   hero: {
+//     background: "#f5f5f5",
+//     padding: "50px 20px",
 //     borderRadius: "10px",
-//     boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.1)",
-//     maxWidth: "500px",
-//     textAlign: "center",
-//     color: "#333",
-//     position: "relative",
-//     zIndex: 2,
 //   },
 //   title: {
-//     fontSize: "1.8rem",
+//     fontSize: "2.5rem",
 //     fontWeight: "bold",
-//     marginBottom: "10px",
 //   },
-//   description: {
+//   subtitle: {
 //     fontSize: "1.2rem",
 //     marginBottom: "20px",
+//     color: "#555",
 //   },
-//   buttonContainer: {
+//   button: {
+//     padding: "10px 20px",
+//     fontSize: "1rem",
+//     background: "#28a745",
+//     color: "#fff",
+//     border: "none",
+//     borderRadius: "5px",
+//     cursor: "pointer",
+//   },
+//   features: {
+//     marginTop: "50px",
+//   },
+//   sectionTitle: {
+//     fontSize: "2rem",
+//     marginBottom: "20px",
+//   },
+//   featureList: {
 //     display: "flex",
-//     flexDirection: "column",
-//     gap: "10px",
-//     marginTop: "20px",
+//     justifyContent: "center",
+//     gap: "20px",
+//     flexWrap: "wrap",
 //   },
-//   getStartedBtn: {
-//     background: "#ff69b4",
-//     color: "#fff",
-//     fontSize: "1rem",
-//     padding: "12px 30px",
-//     borderRadius: "25px",
-//     border: "none",
-//     cursor: "pointer",
-//     boxShadow: "0px 4px 6px rgba(0, 0, 0, 0.2)",
-//     transition: "all 0.3s ease-in-out",
-//     outline: "none",
+//   featureItem: {
+//     background: "#e3e3e3",
+//     padding: "20px",
+//     borderRadius: "8px",
+//     width: "300px",
+//     textAlign: "left",
 //   },
-//   loginBtn: {
+//   cta: {
+//     marginTop: "40px",
+//     padding: "30px",
 //     background: "#007bff",
-//     color: "#fff",
-//     fontSize: "1rem",
-//     padding: "12px 30px",
-//     borderRadius: "25px",
-//     border: "none",
-//     cursor: "pointer",
-//     boxShadow: "0px 4px 6px rgba(0, 0, 0, 0.2)",
-//     transition: "all 0.3s ease-in-out",
-//     outline: "none",
-//   },
-//   adminLoginBtn: {
-//     background: "#ff4500",
-//     color: "#fff",
-//     fontSize: "1rem",
-//     padding: "12px 30px",
-//     borderRadius: "25px",
-//     border: "none",
-//     cursor: "pointer",
-//     boxShadow: "0px 4px 6px rgba(0, 0, 0, 0.2)",
-//     transition: "all 0.3s ease-in-out",
-//     outline: "none",
+//     color: "white",
+//     borderRadius: "10px",
 //   },
 // };
 
@@ -163,74 +113,63 @@
 
 
 
+
+
+
+
 import React from "react";
 import { Link } from "react-router-dom";
 
-function Home() {
-  const styles = {
-    container: {
-      textAlign: "center",
-      margin: "100px auto",
-      padding: "20px",
-      maxWidth: "500px",
-      backgroundColor: "#f9f9f9",
-      borderRadius: "10px",
-      boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.1)",
-    },
-    title: {
-      fontSize: "26px",
-      color: "#333",
-    },
-    highlight: {
-      color: "#007bff",
-    },
-    text: {
-      fontSize: "18px",
-      color: "#555",
-      marginBottom: "20px",
-    },
-    buttonGroup: {
-      display: "flex",
-      justifyContent: "center",
-      gap: "15px",
-    },
-    button: {
-      padding: "10px 20px",
-      textDecoration: "none",
-      fontSize: "16px",
-      borderRadius: "5px",
-      color: "white",
-      transition: "0.3s",
-    },
-    loginBtn: {
-      backgroundColor: "#007bff",
-    },
-    registerBtn: {
-      backgroundColor: "#28a745",
-    },
-    buttonHover: {
-      opacity: "0.8",
-    },
-  };
-
+const HomePage = () => {
   return (
-    <div style={styles.container}>
-      <h1 style={styles.title}>
-        Welcome to <span style={styles.highlight}>Personal Skincare Assistant</span>
-      </h1>
-      <p style={styles.text}>Your personalized skincare solutions are just a few clicks away!</p>
+    <div style={{ fontFamily: "Arial, sans-serif", textAlign: "center" }}>
+      {/* Header */}
+      <header style={{ backgroundColor: "#4CAF50", padding: "15px", color: "white" }}>
+        <h1>Personal Skincare Assistant</h1>
+        <nav>
+          <Link to="/products" style={{ margin: "0 15px", color: "white", textDecoration: "none" }}>Products</Link>
+          <Link to="/skin-analysis" style={{ margin: "0 15px", color: "white", textDecoration: "none" }}>Skin Analysis</Link>
+          <Link to="/login" style={{ margin: "0 15px", color: "white", textDecoration: "none" }}>Login</Link>
+        </nav>
+      </header>
 
-      <div style={styles.buttonGroup}>
-        <Link to="/admin-login" style={{ ...styles.button, ...styles.loginBtn }}>
-          Login
+      {/* Hero Section */}
+      <section style={{ padding: "50px 20px", backgroundColor: "#f9f9f9" }}>
+        <h2>Get Personalized Skincare Recommendations</h2>
+        <p>Analyze your skin and find the best products tailored for you.</p>
+        <Link to="/skin-analysis">
+          <button style={{ padding: "10px 20px", backgroundColor: "#4CAF50", color: "white", border: "none", cursor: "pointer", fontSize: "16px" }}>
+            Start Analysis
+          </button>
         </Link>
-        <Link to="/signup" style={{ ...styles.button, ...styles.registerBtn }}>
-          Register
-        </Link>
-      </div>
+      </section>
+
+      {/* Features Section */}
+      <section style={{ display: "flex", justifyContent: "center", padding: "30px", gap: "20px" }}>
+        <div style={{ width: "300px", padding: "20px", border: "1px solid #ddd", borderRadius: "8px" }}>
+          <h3>Skin Analysis</h3>
+          <p>Answer simple questions and predict your skin type & condition.</p>
+        </div>
+        <div style={{ width: "300px", padding: "20px", border: "1px solid #ddd", borderRadius: "8px" }}>
+          <h3>Product Recommendations</h3>
+          <p>Get a list of skincare products suited to your skin’s needs.</p>
+        </div>
+        <div style={{ width: "300px", padding: "20px", border: "1px solid #ddd", borderRadius: "8px" }}>
+          <h3>Shop </h3>
+          <p>Buy recommended products.</p>
+        </div>
+      </section>
+
+      {/* Footer */}
+      <footer style={{ backgroundColor: "#4CAF50", color: "white", padding: "15px", marginTop: "20px" }}>
+        <p>&copy; 2025 Personal Skincare Assistant. All rights reserved.</p>
+      </footer>
     </div>
   );
-}
+};
 
-export default Home;
+export default HomePage;
+
+
+
 
