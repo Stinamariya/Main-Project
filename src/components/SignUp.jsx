@@ -1,187 +1,172 @@
+// import React, { useState } from "react";
+// import axios from "axios";
+// import { useNavigate } from "react-router-dom";
+
+// const Signup = () => {
+//     const [formData, setFormData] = useState({ username: "", email: "", password: "", role: "user" });
+//     const [error, setError] = useState("");
+//     const navigate = useNavigate();
+
+//     const handleChange = (e) => {
+//         setFormData({ ...formData, [e.target.name]: e.target.value });
+//     };
+
+//     const handleSubmit = async (e) => {
+//         e.preventDefault();
+//         try {
+//             await axios.post("http://localhost:3031/Signup", formData);
+//             alert("Signup Successful! Please login.");
+//             navigate("/login");
+//         } catch (err) {
+//             setError(err.response?.data?.message || "Something went wrong");
+//         }
+//     };
+
+//     return (
+//         <div className="container">
+//             <h2>Signup</h2>
+//             {error && <p className="error">{error}</p>}
+//             <form onSubmit={handleSubmit}>
+//                 <input type="text" name="username" placeholder="Username" onChange={handleChange} required />
+//                 <input type="email" name="email" placeholder="Email" onChange={handleChange} required />
+//                 <input type="password" name="password" placeholder="Password" onChange={handleChange} required />
+//                 <select name="role" onChange={handleChange}>
+//                     <option value="user">User</option>
+//                     <option value="admin">Admin</option>
+//                 </select>
+//                 <button type="submit">Sign Up</button>
+//             </form>
+//         </div>
+//     );
+// };
+
+// export default Signup;
+
+
+
+
+
+
+
+
+
+
 import React, { useState } from "react";
 import axios from "axios";
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from "react-router-dom";
 
 const Signup = () => {
-  const [username, setUsername] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [cnfPass, setCnfPass] = useState("");
-  const [role, setRole] = useState("user"); // Default role set to 'user'
-  const [error, setError] = useState(""); // For storing error messages
-  const navigate = useNavigate();
+    const [formData, setFormData] = useState({ username: "", email: "", password: "", role: "user" });
+    const [error, setError] = useState("");
+    const navigate = useNavigate();
 
-  const handleSignup = async (e) => {
-    e.preventDefault(); // Prevent page refresh on form submission
+    const handleChange = (e) => {
+        setFormData({ ...formData, [e.target.name]: e.target.value });
+    };
 
-    // Check if password and confirm password match
-    if (password !== cnfPass) {
-      setError("Passwords do not match!");
-      return;
-    }
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        try {
+            await axios.post("http://localhost:3031/Signup", formData);
+            alert("Signup Successful! Please login.");
+            navigate("/login");
+        } catch (err) {
+            setError(err.response?.data?.message || "Something went wrong");
+        }
+    };
 
-    try {
-      // Send a POST request to the backend to register the user
-      const response = await axios.post("http://localhost:3031/Signup", { username, email, password, role });
+    // Inline CSS styles
+    const containerStyle = {
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        justifyContent: "center",
+        padding: "20px",
+        maxWidth: "400px",
+        margin: "0 auto",
+        border: "1px solid #ddd",
+        borderRadius: "8px",
+        backgroundColor: "#f9f9f9",
+    };
 
-      // Assuming the backend response contains the user's role
-      if (response.data.role === "admin") {
-        alert("Admin signup successful!");
-        // Redirect to admin login page
-        navigate("/admin-login");
-      } else {
-        alert("User signup successful!");
-        // Redirect to user login page
-        navigate("/login");
-      }
-    } catch (error) {
-      console.error("Signup failed:", error);
-      setError(error.response?.data.message || "Signup failed. Please try again.");
-    }
-  };
+    const headingStyle = {
+        textAlign: "center",
+        marginBottom: "20px",
+    };
 
-  return (
-    <div className="container">
-      <center><h1><b>SIGN UP</b></h1></center>
-      <div className="form-container">
-        <div className="form-group">
-          {/* Username Field */}
-          <label htmlFor="username">Name</label>
-          <input 
-            type="text" 
-            id="username" 
-            value={username} 
-            onChange={(e) => setUsername(e.target.value)} 
-            placeholder="Enter your name"
-            required
-          />
+    const inputStyle = {
+        width: "100%",
+        padding: "10px",
+        margin: "10px 0",
+        borderRadius: "4px",
+        border: "1px solid #ddd",
+    };
+
+    const selectStyle = {
+        width: "100%",
+        padding: "10px",
+        margin: "10px 0",
+        borderRadius: "4px",
+        border: "1px solid #ddd",
+    };
+
+    const buttonStyle = {
+        padding: "10px 20px",
+        backgroundColor: "#4CAF50",
+        color: "#fff",
+        border: "none",
+        borderRadius: "4px",
+        cursor: "pointer",
+        width: "100%",
+        marginTop: "20px",
+    };
+
+    const errorStyle = {
+        color: "red",
+        marginBottom: "15px",
+    };
+
+    return (
+        <div style={containerStyle}>
+            <h2 style={headingStyle}>Signup</h2>
+            {error && <p style={errorStyle}>{error}</p>}
+            <form onSubmit={handleSubmit}>
+                <input
+                    type="text"
+                    name="username"
+                    placeholder="Username"
+                    onChange={handleChange}
+                    required
+                    style={inputStyle}
+                />
+                <input
+                    type="email"
+                    name="email"
+                    placeholder="Email"
+                    onChange={handleChange}
+                    required
+                    style={inputStyle}
+                />
+                <input
+                    type="password"
+                    name="password"
+                    placeholder="Password"
+                    onChange={handleChange}
+                    required
+                    style={inputStyle}
+                />
+                <select
+                    name="role"
+                    onChange={handleChange}
+                    style={selectStyle}
+                >
+                    <option value="user">User</option>
+                    <option value="admin">Admin</option>
+                </select>
+                <button type="submit" style={buttonStyle}>Sign Up</button>
+            </form>
         </div>
-
-        {/* Role Dropdown */}
-        <div className="form-group">
-          <label htmlFor="role">Role</label>
-          <select 
-            name="role" 
-            value={role} 
-            onChange={(e) => setRole(e.target.value)} 
-            required
-          >
-            <option value="admin">Admin</option>
-            <option value="user">User</option>
-          </select>
-        </div>
-
-        {/* Email Field */}
-        <div className="form-group">
-          <label htmlFor="email">Email</label>
-          <input 
-            type="email" 
-            id="email" 
-            value={email} 
-            onChange={(e) => setEmail(e.target.value)} 
-            placeholder="Enter your email"
-            required
-          />
-        </div>
-
-        {/* Password Field */}
-        <div className="form-group">
-          <label htmlFor="password">Password</label>
-          <input 
-            type="password" 
-            id="password" 
-            value={password} 
-            onChange={(e) => setPassword(e.target.value)} 
-            placeholder="Enter your password"
-            required
-          />
-        </div>
-
-        {/* Confirm Password Field */}
-        <div className="form-group">
-          <label htmlFor="cnfPass">Confirm Password</label>
-          <input 
-            type="password" 
-            id="cnfPass" 
-            value={cnfPass} 
-            onChange={(e) => setCnfPass(e.target.value)} 
-            placeholder="Re-enter your password"
-            required
-          />
-        </div>
-
-        {/* Error Message */}
-        {error && <div className="error-message">{error}</div>}
-
-        {/* Register Button */}
-        <div className="form-group">
-          <button onClick={handleSignup} className="btn btn-success">Register</button>
-        </div>
-
-        {/* Link to Login */}
-        <div className="form-group">
-          <center><a href="/login">Back to Login</a></center> 
-        </div>
-      </div>
-      <style jsx>{`
-        .container {
-          padding: 2rem;
-          max-width: 500px;
-          margin: 0 auto;
-          background-color: #f7f7f7;
-          border-radius: 8px;
-          box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-        }
-        h1 {
-          margin-bottom: 1.5rem;
-        }
-        .form-container {
-          display: flex;
-          flex-direction: column;
-          gap: 1rem;
-        }
-        .form-group {
-          display: flex;
-          flex-direction: column;
-        }
-        label {
-          font-weight: bold;
-          margin-bottom: 0.5rem;
-        }
-        input, select {
-          padding: 0.75rem;
-          border-radius: 4px;
-          border: 1px solid #ccc;
-        }
-        input:focus, select:focus {
-          border-color: #007bff;
-          outline: none;
-        }
-        .btn {
-          padding: 0.75rem 1.5rem;
-          background-color: #28a745;
-          color: white;
-          border: none;
-          border-radius: 4px;
-          cursor: pointer;
-        }
-        .btn:hover {
-          background-color: #218838;
-        }
-        .error-message {
-          color: red;
-          font-size: 0.9rem;
-        }
-        a {
-          color: #007bff;
-          text-decoration: none;
-        }
-        a:hover {
-          text-decoration: underline;
-        }
-      `}</style>
-    </div>
-  );
+    );
 };
 
 export default Signup;

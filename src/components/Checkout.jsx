@@ -1,230 +1,242 @@
-import React, { useState, useEffect } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+// import React, { useEffect, useState } from "react";
+
+// function Checkout() {
+//   const [selectedProducts, setSelectedProducts] = useState([]);
+//   const [userDetails, setUserDetails] = useState({
+//     name: "",
+//     phone: "",
+//     address: "",
+//     paymentMethod: "Card Payment", // Default selection
+//   });
+
+//   const userId = localStorage.getItem("userId");
+
+//   useEffect(() => {
+//     const storedCheckoutItems = JSON.parse(localStorage.getItem(`checkout_${userId}`)) || [];
+//     setSelectedProducts(storedCheckoutItems);
+//   }, [userId]);
+
+//   // Handle form input change
+//   const handleInputChange = (e) => {
+//     setUserDetails({ ...userDetails, [e.target.name]: e.target.value });
+//   };
+
+//   // Handle payment
+//   const handlePayment = () => {
+//     if (!userDetails.name || !userDetails.phone || !userDetails.address) {
+//       alert("Please fill in all user details before proceeding.");
+//       return;
+//     }
+
+//     const orderDetails = {
+//       userId,
+//       user: userDetails,
+//       products: selectedProducts,
+//       totalAmount: selectedProducts.reduce((sum, product) => sum + (product.price || 0) * product.quantity, 0).toFixed(2),
+//       paymentMethod: userDetails.paymentMethod,
+//       paymentStatus: "Paid",
+//     };
+
+//     console.log("Order Placed:", orderDetails);
+
+//     // Store order details in localStorage (simulate backend processing)
+//     localStorage.setItem(`order_${userId}`, JSON.stringify(orderDetails));
+
+//     // Remove purchased items from the cart
+//     const cart = JSON.parse(localStorage.getItem(`cart_${userId}`)) || [];
+//     const updatedCart = cart.filter((product) => !selectedProducts.some((p) => p._id === product._id));
+
+//     localStorage.setItem(`cart_${userId}`, JSON.stringify(updatedCart));
+//     localStorage.removeItem(`checkout_${userId}`);
+
+//     alert(`Payment Successful! Order placed using ${userDetails.paymentMethod}.`);
+//     window.location.href = "/orders"; // Redirect to Orders Page
+//   };
+
+//   return (
+//     <div>
+//       <h1>Checkout</h1>
+//       <h3>Enter Your Details:</h3>
+//       <input type="text" name="name" placeholder="Full Name" value={userDetails.name} onChange={handleInputChange} required />
+//       <input type="text" name="phone" placeholder="Phone Number" value={userDetails.phone} onChange={handleInputChange} required />
+//       <input type="text" name="address" placeholder="Shipping Address" value={userDetails.address} onChange={handleInputChange} required />
+
+//       <h3>Select Payment Method:</h3>
+//       <select name="paymentMethod" value={userDetails.paymentMethod} onChange={handleInputChange}>
+//         <option value="Card Payment">Card Payment</option>
+//         <option value="UPI">UPI</option>
+//         <option value="Net Banking">Net Banking</option>
+//         <option value="Cash on Delivery">Cash on Delivery</option>
+//       </select>
+
+//       <h3>Order Summary:</h3>
+//       <ul>
+//         {selectedProducts.map((product) => (
+//           <li key={product._id}>
+//             {product.productName} - ${product.price} x {product.quantity} = ${(product.price * product.quantity).toFixed(2)}
+//           </li>
+//         ))}
+//       </ul>
+//       <h3>Total: ${selectedProducts.reduce((sum, product) => sum + (product.price || 0) * product.quantity, 0).toFixed(2)}</h3>
+
+//       <button onClick={handlePayment} style={{ padding: "10px", background: "blue", color: "white" }}>
+//         Pay Now
+//       </button>
+//     </div>
+//   );
+// }
+
+// export default Checkout;
+
+
+
+
+
+
+
+
+
+
+
+
+
+import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 function Checkout() {
-  const location = useLocation();
-  const { cart, billingDetails: initialBillingDetails } = location.state || {}; // Receive billingDetails
-  const [address, setAddress] = useState("");
-  const [paymentMethod, setPaymentMethod] = useState("credit-card");
-  const [billingDetails, setBillingDetails] = useState(initialBillingDetails || {});
-  const [isFormValid, setIsFormValid] = useState(false); // Track form validity
+  const [selectedProducts, setSelectedProducts] = useState([]);
+  const [userDetails, setUserDetails] = useState({
+    name: "",
+    phone: "",
+    address: "",
+    paymentMethod: "Card Payment",
+  });
   const navigate = useNavigate();
-  const selectedProducts = cart.filter((product) => product.selected); 
-
+  const userId = localStorage.getItem("userId");
 
   useEffect(() => {
-    // Validate the form: all fields should be filled
-    const isValid =
-      billingDetails.name && billingDetails.address && billingDetails.phone;
-    setIsFormValid(isValid);
-  }, [billingDetails]);
-  
-
-  const handleAddressChange = (e) => {
-    const { name, value } = e.target;
-  
-    // Check if value is defined, otherwise default to an empty string
-    const newValue = value ? value.trim() : '';  // Default to empty string if undefined
-  
-    setBillingDetails((prevDetails) => ({
-      ...prevDetails,
-      [name]: newValue,
-    }));
-  };
-  
-
-  const handleBillingChange = (e) => {
-    const { name, value } = e.target;
-  
-    // Ensure value is defined and not null before calling .trim()
-    const newValue = value ? value.trim() : '';  // Default to empty string if value is undefined
-  
-    setBillingDetails((prevDetails) => ({
-      ...prevDetails,
-      [name]: newValue,
-    }));
-  };
-  
-
-  const handlePhoneChange = (e) => {
-    const { name, value } = e.target;
-  
-    // Check if value is defined, otherwise default to an empty string
-    const newValue = value ? value.trim() : '';  // Default to empty string if undefined
-  
-    setBillingDetails((prevDetails) => ({
-      ...prevDetails,
-      [name]: newValue,
-    }));
-  };
-  
-  // Inside your Checkout page (or wherever the payment is handled):
-  const handleCheckout = () => {
-    const orderSummary = {
-      products: cart.map((item) => ({
-        name: item.name,
-        price: item.price,
-        quantity: item.quantity,
-      })),
-      total: cart.reduce((total, item) => total + item.price * item.quantity, 0),
-    };
-  
-    // Simulate successful payment
-    alert("Payment successful! Your order has been placed.");
-  
-    // Navigate to the order confirmation page with orderSummary
-    navigate("/order-confirmation", { state: { orderSummary } });
-  };
-  
-  const handlePaymentSuccess = (paymentData) => {
-    const userId = localStorage.getItem("userId"); // Get userId from local storage or context
-    if (!userId) {
-      alert("User not logged in. Please log in first.");
-      navigate("/login"); // Redirect to login if userId is missing
-      return;
+    try {
+      const storedCheckoutItems = JSON.parse(localStorage.getItem(`checkout_${userId}`)) || [];
+      setSelectedProducts(storedCheckoutItems);
+    } catch (error) {
+      console.error("Error loading checkout items:", error);
     }
-  
-    const selectedProducts = cart.filter((product) => product.selected);
-  
-    const orderDetails = {
-      userId, // Include userId
-      cart: selectedProducts,
-      payment: {
-        id: paymentData.id,
-        amount: paymentData.amount,
-        method: paymentData.method,
-        status: "Success",
-      },
-    };
-  
-    // Navigate to the order confirmation page with order details
-    navigate("/order-confirmation", { state: { order: orderDetails } });
+  }, [userId]);
+
+  const handleInputChange = (e) => {
+    setUserDetails({ ...userDetails, [e.target.name]: e.target.value });
   };
-  
-  
-  
+
+  const validateForm = () => {
+    const { name, phone, address } = userDetails;
+    const phoneRegex = /^[0-9]{10}$/;
+    if (!name.trim() || !phone.trim() || !address.trim()) {
+      alert("All fields are required.");
+      return false;
+    }
+    if (!phoneRegex.test(phone)) {
+      alert("Enter a valid 10-digit phone number.");
+      return false;
+    }
+    return true;
+  };
+
+  const handlePayment = () => {
+    if (!validateForm()) return;
+
+    const orderDetails = {
+      userId,
+      user: userDetails,
+      products: selectedProducts,
+      totalAmount: selectedProducts.reduce((sum, product) => sum + (product.price || 0) * product.quantity, 0).toFixed(2),
+      paymentMethod: userDetails.paymentMethod,
+      paymentStatus: "Paid",
+    };
+
+    console.log("Order Placed:", orderDetails);
+
+    localStorage.setItem(`order_${userId}`, JSON.stringify(orderDetails));
+
+    const cart = JSON.parse(localStorage.getItem(`cart_${userId}`)) || [];
+    const updatedCart = cart.filter((product) => !selectedProducts.some((p) => p._id === product._id));
+
+    localStorage.setItem(`cart_${userId}`, JSON.stringify(updatedCart));
+    localStorage.removeItem(`checkout_${userId}`);
+
+    alert(`Payment Successful! Order placed using ${userDetails.paymentMethod}.`);
+    navigate("/orders");
+  };
 
   return (
-    <div className="checkout-container">
-      <h1 className="checkout-title">Shipping and Billing Details</h1>
-      
-      <br />
-      <div className="billing-details">
-        
-        <label>
-          <strong>Name:</strong>
-          <input
-            type="text"
-            name="name"
-            value={billingDetails.name}
-            onChange={handleBillingChange}
-            placeholder="Enter your full name"
-          />
-        </label>
-        <br />
-        <label>
-            <br/>
-          <strong>Address:</strong>
-          <input
-            type="text"
-            name="address"
-            value={billingDetails.address}
-            onChange={handleAddressChange}
-            placeholder="Enter your shipping address"
-          />
-        </label>
-        <br />
-        <label>
-        <br/>
-          <strong>Phone:</strong>
-          <input
-            type="text"
-            name="phone"
-            value={billingDetails.phone}
-            onChange={handlePhoneChange}
-            placeholder="Enter your phone number"
-          />
-        </label>
-        
-      </div>
-      <br />
-      <label className="checkout-label">
-        Payment Method:
-        <select 
-          className="checkout-select" 
-          value={paymentMethod} 
-          onChange={(e) => setPaymentMethod(e.target.value)}
-        >
-          <option value="credit-card">Credit Card</option>
-          <option value="paypal">PayPal</option>
-        </select>
-      </label>
+    <div style={{ fontFamily: "Arial, sans-serif", padding: "20px", maxWidth: "600px", margin: "0 auto", border: "1px solid #ccc", borderRadius: "8px" }}>
+      <h1 style={{ textAlign: "center", color: "#333" }}>Checkout</h1>
+      <h3 style={{ color: "#555" }}>Enter Your Details:</h3>
+      <input
+        type="text"
+        name="name"
+        placeholder="Full Name"
+        value={userDetails.name}
+        onChange={handleInputChange}
+        required
+        style={{ width: "100%", padding: "10px", margin: "10px 0", border: "1px solid #ccc", borderRadius: "4px" }}
+      />
+      <input
+        type="text"
+        name="phone"
+        placeholder="Phone Number"
+        value={userDetails.phone}
+        onChange={handleInputChange}
+        required
+        style={{ width: "100%", padding: "10px", margin: "10px 0", border: "1px solid #ccc", borderRadius: "4px" }}
+      />
+      <input
+        type="text"
+        name="address"
+        placeholder="Shipping Address"
+        value={userDetails.address}
+        onChange={handleInputChange}
+        required
+        style={{ width: "100%", padding: "10px", margin: "10px 0", border: "1px solid #ccc", borderRadius: "4px" }}
+      />
 
-      <button 
-        className="checkout-btn" 
-        onClick={handleCheckout} 
-        disabled={!isFormValid} // Disable if form is not valid
+      <h3 style={{ color: "#555" }}>Select Payment Method:</h3>
+      <select
+        name="paymentMethod"
+        value={userDetails.paymentMethod}
+        onChange={handleInputChange}
+        style={{ width: "100%", padding: "10px", margin: "10px 0", border: "1px solid #ccc", borderRadius: "4px" }}
       >
-        Place Order
+        <option value="Card Payment">Card Payment</option>
+        <option value="UPI">UPI</option>
+        <option value="Net Banking">Net Banking</option>
+        <option value="Cash on Delivery">Cash on Delivery</option>
+      </select>
+
+      <h3 style={{ color: "#555" }}>Order Summary:</h3>
+      <ul style={{ listStyleType: "none", padding: "0" }}>
+        {selectedProducts.map((product) => (
+          <li key={product._id} style={{ padding: "10px 0", borderBottom: "1px solid #ddd" }}>
+            {product.productName} - ${product.price} x {product.quantity} = ${(product.price * product.quantity).toFixed(2)}
+          </li>
+        ))}
+      </ul>
+      <h3 style={{ fontWeight: "bold", color: "#333" }}>Total: ${selectedProducts.reduce((sum, product) => sum + (product.price || 0) * product.quantity, 0).toFixed(2)}</h3>
+
+      <button
+        onClick={handlePayment}
+        style={{
+          padding: "12px 20px",
+          background: "#4CAF50",
+          color: "white",
+          border: "none",
+          borderRadius: "4px",
+          cursor: "pointer",
+          fontSize: "16px",
+          width: "100%",
+        }}
+      >
+        Pay Now
       </button>
-
-      <style jsx>{`
-        /* General Checkout Styles */
-        .checkout-container {
-          max-width: 600px;
-          margin: 0 auto;
-          padding: 20px;
-          border-radius: 8px;
-          box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-          background-color: #f9f9f9;
-        }
-
-        .checkout-title {
-          text-align: center;
-          font-size: 24px;
-          color: #333;
-          margin-bottom: 20px;
-        }
-
-        .checkout-label {
-          display: block;
-          margin-bottom: 10px;
-          font-weight: bold;
-          font-size: 16px;
-        }
-
-        .checkout-input,
-        .checkout-select {
-          width: 100%;
-          padding: 10px;
-          margin-bottom: 20px;
-          border: 1px solid #ddd;
-          border-radius: 5px;
-          font-size: 16px;
-          box-sizing: border-box;
-        }
-
-        .checkout-btn {
-          width: 100%;
-          padding: 12px;
-          background-color: #4CAF50;
-          color: white;
-          font-size: 16px;
-          border: none;
-          border-radius: 5px;
-          cursor: pointer;
-          transition: background-color 0.3s;
-        }
-
-        .checkout-btn:disabled {
-          background-color: #b0b0b0;
-          cursor: not-allowed;
-        }
-
-        .checkout-btn:hover {
-          background-color: #45a049;
-        }
-      `}</style>
     </div>
   );
 }
