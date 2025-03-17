@@ -9,9 +9,8 @@ function OrderSummary() {
   const [selectedItems, setSelectedItems] = useState({});
 
   useEffect(() => {
-    // Initialize selectedItems with the quantity of each product (default is 1)
     const initialSelectedItems = cart.reduce((acc, product) => {
-      acc[product.productName] = { selected: true, quantity: product.quantity }; // Default all products as selected with their initial quantity
+      acc[product._id] = { selected: true, quantity: product.quantity }; // Use _id for uniqueness
       return acc;
     }, {});
     setSelectedItems(initialSelectedItems);
@@ -21,49 +20,41 @@ function OrderSummary() {
   const calculateTotal = () => {
     let subtotal = 0;
     cart.forEach((product) => {
-      if (selectedItems[product.productName]?.selected) {
-        subtotal += product.price * selectedItems[product.productName]?.quantity;
+      if (selectedItems[product._id]?.selected) {
+        subtotal += product.price * selectedItems[product._id]?.quantity;
       }
     });
 
-    const discount = 10; // Example fixed discount
-    const tax = subtotal * 0.08; // Example tax rate of 8%
+    const discount = subtotal > 50 ? 10 : 0; // Discount if subtotal is above 50
+    const tax = subtotal * 0.08; // Tax rate of 8%
     const total = subtotal + tax - discount;
     return { subtotal, total, discount, tax };
   };
 
   const { subtotal, total, discount, tax } = calculateTotal();
 
-  // Handle product selection toggle
-  const handleProductSelection = (productName) => {
+  const handleProductSelection = (productId) => {
     setSelectedItems((prevState) => ({
       ...prevState,
-      [productName]: {
-        ...prevState[productName],
-        selected: !prevState[productName].selected,
+      [productId]: {
+        ...prevState[productId],
+        selected: !prevState[productId].selected,
       },
     }));
   };
 
-  // Handle quantity change using number input
-  const handleQuantityChange = (productName, quantity) => {
-    setSelectedItems((prevState) => {
-      const newQuantity = Math.max(1, quantity); // Prevent quantity from going below 1
-      return {
-        ...prevState,
-        [productName]: {
-          ...prevState[productName],
-          quantity: newQuantity,
-        },
-      };
-    });
+  const handleQuantityChange = (productId, quantity) => {
+    setSelectedItems((prevState) => ({
+      ...prevState,
+      [productId]: {
+        ...prevState[productId],
+        quantity: Math.max(1, quantity),
+      },
+    }));
   };
 
   const proceedToPayment = () => {
-    // Filter the selected products and pass them to the checkout page
-    const selectedProducts = cart.filter(
-      (product) => selectedItems[product.productName]?.selected
-    );
+    const selectedProducts = cart.filter((product) => selectedItems[product._id]?.selected);
     navigate("/checkout", { state: { cart: selectedProducts } });
   };
 
@@ -72,102 +63,71 @@ function OrderSummary() {
   }
 
   return (
-    <div className="order-summary">
-      <h3>Order Summary</h3>
-      <ul>
-        {cart.map((product, index) => (
-          <li key={index} className="product-item">
-            <div className="product-info">
-              <label>
+    <div style={{ padding: "20px", maxWidth: "800px", margin: "0 auto", fontFamily: "Arial, sans-serif" }}>
+      <h3 style={{ textAlign: "center", fontSize: "24px", marginBottom: "20px" }}>Order Summary</h3>
+      <ul style={{ listStyleType: "none", paddingLeft: "0" }}>
+        {cart.map((product) => (
+          <li key={product._id} style={{ marginBottom: "15px", borderBottom: "1px solid #ccc", paddingBottom: "10px" }}>
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+              <label style={{ fontSize: "16px" }}>
                 <input
                   type="checkbox"
-                  checked={selectedItems[product.productName]?.selected}
-                  onChange={() => handleProductSelection(product.productName)}
+                  checked={selectedItems[product._id]?.selected}
+                  onChange={() => handleProductSelection(product._id)}
+                  style={{ marginRight: "10px" }}
                 />
                 <span>{product.productName}</span> - {product.quantity} x ${product.price}
               </label>
             </div>
 
-            {selectedItems[product.productName]?.selected && (
-              <div className="quantity-container">
+            {selectedItems[product._id]?.selected && (
+              <div style={{ marginTop: "10px" }}>
                 <input
                   type="number"
-                  value={selectedItems[product.productName]?.quantity}
+                  value={selectedItems[product._id]?.quantity}
                   onChange={(e) =>
-                    handleQuantityChange(product.productName, parseInt(e.target.value) || 1)
+                    handleQuantityChange(product._id, parseInt(e.target.value) || 1)
                   }
                   min="1"
-                  className="quantity-input"
+                  style={{
+                    padding: "5px",
+                    fontSize: "14px",
+                    borderRadius: "4px",
+                    border: "1px solid #ccc",
+                    width: "60px",
+                  }}
                 />
               </div>
             )}
           </li>
         ))}
       </ul>
-      <p><strong>Subtotal:</strong> ${subtotal.toFixed(2)}</p>
-      {discount > 0 && <p><strong>Discount:</strong> -${discount.toFixed(2)}</p>}
-      <p><strong>Tax (8%):</strong> +${tax.toFixed(2)}</p>
-      <p><strong>Total:</strong> ${total.toFixed(2)}</p>
+      <div style={{ marginTop: "20px", fontSize: "18px" }}>
+        <p><strong>Subtotal:</strong> ${subtotal.toFixed(2)}</p>
+        {discount > 0 && <p><strong>Discount:</strong> -${discount.toFixed(2)}</p>}
+        <p><strong>Tax (8%):</strong> +${tax.toFixed(2)}</p>
+        <p><strong>Total:</strong> ${total.toFixed(2)}</p>
+      </div>
 
-      <button onClick={proceedToPayment} className="checkout">
+      <button
+        onClick={proceedToPayment}
+        style={{
+          width: "100%",
+          padding: "12px",
+          backgroundColor: "#4CAF50",
+          color: "white",
+          border: "none",
+          borderRadius: "4px",
+          fontSize: "16px",
+          cursor: "pointer",
+          marginTop: "20px",
+        }}
+      >
         Proceed to Pay
       </button>
-
-      <style jsx>{`
-        .order-summary {
-          max-width: 1200px;
-          margin: 0 auto;
-          padding: 20px;
-          text-align: center;
-        }
-        .order-summary h3 {
-          font-size: 2rem;
-          color: #343a40;
-        }
-        .order-summary ul {
-          list-style-type: none;
-          padding: 0;
-          margin: 0;
-        }
-        .product-item {
-          font-size: 1.1rem;
-          color: #555;
-          margin-bottom: 15px;
-          display: flex;
-          justify-content: space-between;
-          align-items: center;
-        }
-        .product-info {
-          flex: 1;
-        }
-        .quantity-container {
-          display: flex;
-          align-items: center;
-        }
-        .quantity-input {
-          width: 60px;
-          padding: 5px;
-          font-size: 1rem;
-          border: 1px solid #ccc;
-          border-radius: 5px;
-          text-align: center;
-        }
-        .checkout {
-          padding: 10px 20px;
-          border: none;
-          border-radius: 5px;
-          background-color: green;
-          color: white;
-          font-size: 1.2rem;
-          cursor: pointer;
-          margin-top: 20px;
-        }
-        .checkout:hover {
-          background-color: darkgreen;
-        }
-      `}</style>
     </div>
   );
 }
 
 export default OrderSummary;
+

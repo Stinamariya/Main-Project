@@ -43,18 +43,18 @@ function Questionnaire() {
       console.error("User ID is not available");
       return;
     }
-  
+
     const data = {
       ...formData,
       userId, // Add the userId to the request payload
     };
-  
+
     try {
       setLoading(true);
       const response = await axios.post("http://localhost:3031/predict-skin", data);
       setPrediction(response.data);
       setLoading(false);
-  
+
       // Navigate to results page and pass the prediction as state
       navigate("/results", { state: { prediction: response.data } });
     } catch (err) {
@@ -62,15 +62,15 @@ function Questionnaire() {
       setLoading(false);
     }
   };
-  
-  
+
   return (
     <div style={styles.container}>
       <h2>Questionnaire</h2>
       <form onSubmit={handleSubmit} style={styles.form}>
         {/* Age Input */}
         <div style={styles.inputGroup}>
-          <label>Age:</label>
+          <label>Age</label>
+          <small>(Enter your age):</small>
           <input
             type="number"
             name="Age"
@@ -79,11 +79,13 @@ function Questionnaire() {
             required
             style={styles.input}
           />
+          
         </div>
 
         {/* Gender Selection */}
         <div style={styles.inputGroup}>
-          <label>Gender:</label>
+          <label>Gender</label>
+          <small>(Select your gender):</small>
           <div style={styles.radioGroup}>
             <label>
               <input
@@ -116,11 +118,13 @@ function Questionnaire() {
               Other
             </label>
           </div>
+          
         </div>
 
         {/* Water Intake */}
         <div style={styles.inputGroup}>
-          <label>Water Intake (Glasses):</label>
+          <label>Water Intake (Glasses)</label>
+          <small>(How many glasses of water do you drink daily?):</small>
           <input
             type="number"
             name="Water_Intake_Glasses"
@@ -129,11 +133,13 @@ function Questionnaire() {
             required
             style={styles.input}
           />
+          
         </div>
 
         {/* Diet Quality */}
         <div style={styles.inputGroup}>
-          <label>Diet Quality:</label>
+          <label>Diet Quality</label>
+          <small>(Select your overall diet quality):</small>
           <div style={styles.radioGroup}>
             <label>
               <input
@@ -166,11 +172,13 @@ function Questionnaire() {
               Poor
             </label>
           </div>
+          
         </div>
 
         {/* Sleep Hours */}
         <div style={styles.inputGroup}>
-          <label>Sleep Hours:</label>
+          <label>Sleep Hours</label>
+          <small>(How many hours do you sleep each night?):</small>
           <input
             type="number"
             name="Sleep_Hours"
@@ -179,11 +187,13 @@ function Questionnaire() {
             required
             style={styles.input}
           />
+          
         </div>
 
         {/* Exercise Frequency */}
         <div style={styles.inputGroup}>
-          <label>Exercise Frequency:</label>
+          <label>Exercise Frequency</label>
+          <small>(How often do you exercise?):</small>
           <div style={styles.radioGroup}>
             <label>
               <input
@@ -216,11 +226,13 @@ function Questionnaire() {
               Regularly
             </label>
           </div>
+          
         </div>
 
         {/* Stress Level */}
         <div style={styles.inputGroup}>
-          <label>Stress Level:</label>
+          <label>Stress Level</label>
+          <small>(How would you rate your stress levels?):</small>
           <div style={styles.radioGroup}>
             <label>
               <input
@@ -253,11 +265,13 @@ function Questionnaire() {
               High
             </label>
           </div>
+          
         </div>
 
         {/* Sun Exposure */}
         <div style={styles.inputGroup}>
-          <label>Sun Exposure:</label>
+          <label>Sun Exposure</label>
+          <small>(How much time do you spend in the sun?):</small>
           <div style={styles.radioGroup}>
             <label>
               <input
@@ -290,11 +304,13 @@ function Questionnaire() {
               High
             </label>
           </div>
+          
         </div>
 
         {/* Hydration Level */}
         <div style={styles.inputGroup}>
-          <label>Hydration Level:</label>
+          <label>Hydration Level</label>
+          <small>(How well-hydrated do you feel?):</small>
           <div style={styles.radioGroup}>
             <label>
               <input
@@ -327,11 +343,13 @@ function Questionnaire() {
               High
             </label>
           </div>
+          
         </div>
 
         {/* Acne History */}
         <div style={styles.inputGroup}>
-          <label>Acne History:</label>
+          <label>Acne History</label>
+          <small>(Do you have a history of acne?):</small>
           <div style={styles.radioGroup}>
             <label>
               <input
@@ -354,11 +372,13 @@ function Questionnaire() {
               No
             </label>
           </div>
+          
         </div>
 
         {/* Redness */}
         <div style={styles.inputGroup}>
-          <label>Redness:</label>
+          <label>Redness</label>
+          <small>(Do you experience redness in your skin?):</small>
           <div style={styles.radioGroup}>
             <label>
               <input
@@ -381,11 +401,13 @@ function Questionnaire() {
               No
             </label>
           </div>
+          
         </div>
 
-        {/* Sensitivity */}
+        {/* Sensitivity to Products */}
         <div style={styles.inputGroup}>
-          <label>Sensitivity to Products:</label>
+          <label>Sensitivity to Products</label>
+          <small>(Are you sensitive to skincare products?):</small>
           <div style={styles.radioGroup}>
             <label>
               <input
@@ -408,11 +430,13 @@ function Questionnaire() {
               No
             </label>
           </div>
+          
         </div>
 
-        {/* Wrinkles/Fine Lines */}
+        {/* Wrinkles / Fine Lines */}
         <div style={styles.inputGroup}>
-          <label>Wrinkles/Fine Lines:</label>
+          <label>Wrinkles/Fine Lines</label>
+          <small>(Do you have wrinkles or fine lines?):</small>
           <div style={styles.radioGroup}>
             <label>
               <input
@@ -435,11 +459,13 @@ function Questionnaire() {
               No
             </label>
           </div>
+          
         </div>
 
         {/* Dark Spots */}
         <div style={styles.inputGroup}>
-          <label>Dark Spots:</label>
+          <label>Dark Spots</label>
+          <small>(Do you have dark spots on your skin?):</small>
           <div style={styles.radioGroup}>
             <label>
               <input
@@ -462,65 +488,55 @@ function Questionnaire() {
               No
             </label>
           </div>
+          
         </div>
 
         {/* Submit Button */}
-        <div style={styles.buttonContainer}>
-          <button type="submit" disabled={loading} style={styles.submitButton}>
-            {loading ? "Loading..." : "Submit"}
-          </button>
-        </div>
-
-        {/* Error Message */}
-        {error && <div style={styles.error}>{error}</div>}
+        <button type="submit" style={styles.submitButton}>
+          Submit
+        </button>
       </form>
+
+      {/* Loading and Error Handling */}
+      {loading && <p>Loading...</p>}
+      {error && <p style={styles.error}>{error}</p>}
     </div>
   );
 }
 
 const styles = {
   container: {
-    marginTop: "30px",
-    maxWidth: "800px",
-    margin: "0 auto",
     padding: "20px",
-    backgroundColor: "#f8f8f8",
-    borderRadius: "10px",
-    boxShadow: "0 0 15px rgba(0, 0, 0, 0.1)",
+    maxWidth: "600px",
+    margin: "auto",
   },
   form: {
     display: "flex",
     flexDirection: "column",
   },
   inputGroup: {
-    marginBottom: "20px",
+    marginBottom: "15px",
   },
   input: {
     padding: "10px",
-    fontSize: "14px",
-    borderRadius: "5px",
-    border: "1px solid #ddd",
+    marginTop: "5px",
+    width: "100%",
   },
   radioGroup: {
     display: "flex",
     flexDirection: "column",
-  },
-  buttonContainer: {
-    marginTop: "20px",
+    gap: "5px",
   },
   submitButton: {
     padding: "10px 20px",
     backgroundColor: "#4CAF50",
-    color: "#fff",
+    color: "white",
     border: "none",
-    borderRadius: "5px",
     cursor: "pointer",
     fontSize: "16px",
   },
   error: {
-    marginTop: "20px",
     color: "red",
-    fontSize: "14px",
   },
 };
 

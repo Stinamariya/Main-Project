@@ -1,17 +1,3 @@
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 import React from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 
@@ -101,9 +87,7 @@ function Products() {
       <button onClick={() => navigate("/cart")} style={styles.goToCartBtn}>
         Go to Cart
       </button>
-      <button onClick={() => navigate(-1)} style={styles.backBtn}>
-        ⬅ Go Back
-      </button>
+      
     </div>
   );
 }
