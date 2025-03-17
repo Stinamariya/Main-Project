@@ -18,19 +18,14 @@ function UserDashboard() {
           <h3>Know Your Skin</h3>
         </Link>
 
-        <Link to="/products" style={styles.card}>
+        {/* <Link to="/products" style={styles.card}>
           <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRQtWiKm9-AT1FZ56aXb7V_EuQKRi-YqI2zKg&s" alt="products" style={styles.icon} />
           <h3>Recommended Products</h3>
-        </Link>
+        </Link> */}
 
         <Link to="/myorders" style={styles.card}>
           <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSq2WzqE_8XWDs1W6dLxfN_2HbGH6Vb5C2u1Q&s" alt="orders" style={styles.icon} />
           <h3>My Orders</h3>
-        </Link>
-
-        <Link to="/profile" style={styles.card}>
-          <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQcCuCOisgxyOypyBi-hRYYV2Onv7KVI6QTVA&s" alt="Profile" style={styles.icon} />
-          <h3>Profile</h3>
         </Link>
       </div>
 
@@ -45,6 +40,10 @@ const styles = {
     textAlign: "center",
     backgroundColor: "#f4f4f4",
     minHeight: "100vh",
+    backgroundImage: "url('https://static.vecteezy.com/system/resources/thumbnails/042/673/230/small/hexagon-security-electronic-for-safety-with-hologram-concept-for-future-technology-element-background-business-screen-vector.jpg')", // Set your image URL here
+    backgroundSize: "cover", // Cover the entire container
+    backgroundPosition: "center", // Center the image
+    backgroundAttachment: "fixed", // Keep the background fixed during scroll
   },
   title: {
     fontSize: "2rem",

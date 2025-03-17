@@ -1,25 +1,30 @@
 import React from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useLocation } from "react-router-dom";
+import { FaHome, FaShoppingCart } from "react-icons/fa"; // Import icons
 
 function Navbar() {
   const navigate = useNavigate();
-  const isAuthenticated = localStorage.getItem("token"); // Check if user is logged in
+  const location = useLocation();
+  const isAuthenticated = !!localStorage.getItem("token"); // Ensure boolean value
 
   const handleLogout = () => {
-    localStorage.removeItem("token"); // Remove authentication token
-    navigate("/login"); // Redirect to login page
+    if (window.confirm("Are you sure you want to logout?")) {
+      localStorage.removeItem("token"); // Remove authentication token
+      navigate("/login"); // Redirect to login page
+    }
   };
 
   return (
     <nav style={styles.navbar}>
       <h2 style={styles.logo}>Skincare Assistant</h2>
       <div style={styles.links}>
-        <Link to="/" style={styles.link}>Home</Link>
-        <Link to="/products" style={styles.link}>Products</Link>
-        <Link to="/cart" style={styles.link}>Cart</Link>
+        <NavLink to="/" icon={<FaHome />} label="Home" location={location} />
+        <NavLink to="/cart" icon={<FaShoppingCart />} label="Cart" location={location} />
 
         {isAuthenticated ? (
-          <button onClick={handleLogout} style={styles.logoutButton}>Logout</button>
+          <button onClick={handleLogout} style={styles.logoutButton}>
+            Logout
+          </button>
         ) : (
           <>
             <Link to="/login" style={styles.link}>Login</Link>
@@ -30,6 +35,16 @@ function Navbar() {
     </nav>
   );
 }
+
+// Helper component for nav links with active state
+const NavLink = ({ to, icon, label, location }) => {
+  const isActive = location.pathname === to;
+  return (
+    <Link to={to} style={{ ...styles.link, fontWeight: isActive ? "bold" : "normal" }}>
+      {icon} {label}
+    </Link>
+  );
+};
 
 const styles = {
   navbar: {
@@ -51,6 +66,8 @@ const styles = {
     color: "white",
     textDecoration: "none",
     fontSize: "1rem",
+    display: "flex",
+    alignItems: "center",
   },
   signupButton: {
     backgroundColor: "#28a745",

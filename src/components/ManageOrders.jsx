@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
+import { useNavigate } from "react-router-dom"; // Import useNavigate hook
 
 const ManageOrders = () => {
   const [orders, setOrders] = useState([]);
+  const navigate = useNavigate(); // Initialize navigate hook
 
   useEffect(() => {
     fetchOrders();
@@ -11,34 +13,59 @@ const ManageOrders = () => {
   const fetchOrders = async () => {
     try {
       const res = await axios.get("http://localhost:3031/api/orders");
-      console.log("Orders Data:", res.data); // ✅ Check if data is received
       setOrders(res.data);
     } catch (error) {
-      console.error("Error fetching orders:", error); // ❌ Log errors
+      console.error("Error fetching orders:", error);
     }
   };
 
   const updateOrderStatus = async (id, status) => {
     try {
       await axios.put(`http://localhost:3031/api/orders/${id}`, { status });
-      fetchOrders();
+      fetchOrders(); // Refresh orders after status update
+      alert("Order status updated to Shipped!"); // Show alert after successful update
     } catch (error) {
       console.error("Error updating order status:", error);
+      alert("Error updating order status!"); // Show alert if there's an error
     }
   };
 
   const deleteOrder = async (id) => {
     try {
       await axios.delete(`http://localhost:3031/api/orders/${id}`);
-      fetchOrders();
+      fetchOrders(); // Refresh orders after deleting
+      alert("Order deleted successfully!"); // Show alert after successful deletion
     } catch (error) {
       console.error("Error deleting order:", error);
+      alert("Error deleting order!"); // Show alert if there's an error
     }
+  };
+
+  // Function to navigate to the previous page
+  const goBack = () => {
+    navigate(-1); // Go back one step in history
   };
 
   return (
     <div style={{ padding: "20px", fontFamily: "Arial, sans-serif" }}>
       <h2 style={{ textAlign: "center", color: "#333" }}>Manage Orders</h2>
+
+      {/* Back Button */}
+      <button
+        onClick={goBack}
+        style={{
+          backgroundColor: "#007bff",
+          color: "white",
+          border: "none",
+          padding: "10px 20px",
+          borderRadius: "5px",
+          cursor: "pointer",
+          marginBottom: "20px",
+        }}
+      >
+        Back
+      </button>
+
       {orders.length === 0 ? (
         <p style={{ textAlign: "center", fontSize: "16px", color: "#666" }}>
           No orders found.

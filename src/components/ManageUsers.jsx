@@ -11,8 +11,12 @@ const ManageUsers = () => {
   }, []);
 
   const fetchUsers = async () => {
-    const res = await axios.get("http://localhost:3031/api/users");
-    setUsers(res.data);
+    try {
+      const res = await axios.get("http://localhost:3031/api/users");
+      setUsers(res.data);
+    } catch (error) {
+      console.error("Error fetching users:", error);
+    }
   };
 
   const deleteUser = async (id) => {
@@ -34,9 +38,7 @@ const ManageUsers = () => {
       <h2 style={styles.header}>Manage Users</h2>
 
       {/* Button to go back to Admin Dashboard */}
-      <button 
-        onClick={() => navigate("/admin-dashboard")} 
-        style={styles.button}>
+      <button onClick={() => navigate("/admin-dashboard")} style={styles.button}>
         Back
       </button>
 
@@ -44,10 +46,10 @@ const ManageUsers = () => {
       <ul style={styles.userList}>
         {users.map((user) => (
           <li key={user._id} style={styles.userItem}>
-            {user.username} ({user.email}){" "}
-            <button 
-              onClick={() => deleteUser(user._id)} 
-              style={styles.deleteButton}>
+            <span style={styles.userInfo}>
+              {user.username} ({user.email})
+            </span>
+            <button onClick={() => deleteUser(user._id)} style={styles.deleteButton}>
               Delete
             </button>
           </li>
@@ -57,7 +59,7 @@ const ManageUsers = () => {
   );
 };
 
-// Inline Styles
+// Inline Styles with Proper Alignment
 const styles = {
   container: {
     padding: "20px",
@@ -66,6 +68,7 @@ const styles = {
   header: {
     textAlign: "center",
     color: "#333",
+    marginBottom: "20px",
   },
   button: {
     marginBottom: "15px",
@@ -79,13 +82,21 @@ const styles = {
   userList: {
     listStyleType: "none",
     padding: 0,
+    width: "60%",
+    margin: "0 auto",
   },
   userItem: {
+    display: "flex", // Flexbox for alignment
+    justifyContent: "space-between", // Space between username and delete button
+    alignItems: "center", // Center align items vertically
     backgroundColor: "#f9f9f9",
     padding: "10px",
     marginBottom: "10px",
     border: "1px solid #ddd",
     borderRadius: "5px",
+  },
+  userInfo: {
+    flexGrow: 1, // Allows text to take available space
   },
   deleteButton: {
     backgroundColor: "#f44336",
@@ -94,7 +105,6 @@ const styles = {
     border: "none",
     borderRadius: "5px",
     cursor: "pointer",
-    marginLeft: "10px",
   },
 };
 

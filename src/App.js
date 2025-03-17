@@ -6,9 +6,7 @@ import Home from "./components/Home";
 import Login from "./components/Login";
 import SignUp from "./components/SignUp";
 import Questionnaire from "./components/Questionnaire";
-// import AdminLogin from "./components/AdminLogin";
 import AdminDashboard from "./components/AdminDashboard";
-// import ChooseLogin from "./components/ChooseLogin";
 import UserDashboard from "./components/UserDashboard";
 // import EditProduct from "./components/EditProduct";
 // import PredictionPage from "./components/PredictionPage";
@@ -87,7 +85,7 @@ function App() {
           <Route path="/admin/users" element={<ManageUsers />} />
           <Route path="/admin/orders" element={<ManageOrders />} />
           <Route path="/myorders" element={<MyOrders />} />
-          <Route path="/orderconfirm" element={<OrderConfirmation />} />
+          <Route path="/orderconfirm/:orderId" element={<OrderConfirmation />} />
           
 
        
