@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom"; // Import useNavigate
+import { Link } from "react-router-dom"; // Import Link component for navigation
 
 const Login = () => {
     const [email, setEmail] = useState("");
@@ -50,7 +51,7 @@ const Login = () => {
         left: 0,
         width: "100%",
         height: "100%",
-        backgroundImage: "url('https://www.shutterstock.com/image-photo/light-green-serum-texture-aloe-260nw-1711629997.jpg')", // Replace with your image URL
+        backgroundImage: "url('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSfDMf3Fmu58pImuumotXNTd2GXKhGr8CNCob3ziIVjj0snylCiybi9rloXkay80jaAAH8&usqp=CAU')", // Replace with your image URL
         backgroundSize: "cover", // Ensure the image covers the entire viewport
         backgroundPosition: "center",
         backgroundAttachment: "fixed", // Keeps the background image fixed when scrolling
@@ -129,6 +130,9 @@ const Login = () => {
                         Login
                     </button>
                 </form>
+                <p style={{ textAlign: "center", marginTop: "20px" }}>
+                    Don't have an account? <Link to="/signup" style={{ color: "#4CAF50", textDecoration: "none" }}>Sign Up</Link>
+                </p>
             </div>
         </div>
     );

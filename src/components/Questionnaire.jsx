@@ -506,38 +506,65 @@ function Questionnaire() {
 
 const styles = {
   container: {
-    padding: "20px",
-    maxWidth: "600px",
+    padding: "25px",
+    maxWidth: "500px",
     margin: "auto",
+    backgroundColor: "#f9f9f9", // Light background
+    borderRadius: "12px",
+    boxShadow: "0 4px 10px rgba(0, 0, 0, 0.1)", // Soft shadow
   },
   form: {
     display: "flex",
     flexDirection: "column",
+    gap: "15px",
   },
   inputGroup: {
-    marginBottom: "15px",
+    marginBottom: "12px",
+  },
+  label: {
+    fontSize: "14px",
+    fontWeight: "600",
+    color: "#333",
+    marginBottom: "5px",
   },
   input: {
-    padding: "10px",
-    marginTop: "5px",
+    padding: "12px",
     width: "100%",
+    fontSize: "14px",
+    borderRadius: "8px",
+    border: "1px solid #ccc",
+    outline: "none",
+    transition: "0.3s ease",
+  },
+  inputFocus: {
+    borderColor: "#4CAF50",
+    boxShadow: "0 0 6px rgba(76, 175, 80, 0.3)", // Subtle glow on focus
   },
   radioGroup: {
     display: "flex",
-    flexDirection: "column",
-    gap: "5px",
+    flexWrap: "wrap",
+    gap: "10px",
   },
   submitButton: {
-    padding: "10px 20px",
+    padding: "12px 20px",
     backgroundColor: "#4CAF50",
     color: "white",
     border: "none",
+    borderRadius: "8px",
     cursor: "pointer",
     fontSize: "16px",
+    transition: "0.3s ease-in-out",
+  },
+  submitButtonHover: {
+    backgroundColor: "#45a049",
   },
   error: {
-    color: "red",
+    color: "#ff4d4d",
+    fontSize: "13px",
+    fontWeight: "bold",
   },
 };
+
+
 
 export default Questionnaire;
