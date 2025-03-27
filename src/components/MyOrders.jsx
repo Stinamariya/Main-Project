@@ -33,10 +33,6 @@ const MyOrders = () => {
       .finally(() => setLoading(false));
   }, [userId]);
 
-  const goToProductDetails = (productId) => {
-    navigate(`/product/${productId}`);
-  };
-
   const goBack = () => {
     navigate(-1);
   };
@@ -66,28 +62,18 @@ const MyOrders = () => {
 
             <h4>Products:</h4>
             <ul style={styles.productList}>
-              {/* Track unique products to avoid duplicate review buttons */}
-              {Array.from(new Set(order.products.map(p => p._id))).map((uniqueProductId) => {
-                const product = order.products.find(p => p._id === uniqueProductId);
-                return (
-                  <li key={product._id} style={styles.productItem}>
-                    <img
-                      src={product.productPic}
-                      alt={product.productName}
-                      style={styles.productImage}
-                    />
+              {order.products.map((product) => (
+                <li key={product._id} style={styles.productItem}>
+                  <img
+                    src={product.productPic}
+                    alt={product.productName}
+                    style={styles.productImage}
+                  />
+                  <span>
                     <strong>{product.productName}</strong> - ₹{product.price} (Qty: {product.quantity})
-
-                    {/* Single Review Button per unique product */}
-                    <button
-                      style={styles.reviewButton}
-                      onClick={() => goToProductDetails(product._id)}
-                    >
-                      Leave a Review
-                    </button>
-                  </li>
-                );
-              })}
+                  </span>
+                </li>
+              ))}
             </ul>
           </div>
         ))
@@ -97,7 +83,6 @@ const MyOrders = () => {
     </div>
   );
 };
-
 
 // Styles
 const styles = {
@@ -135,21 +120,13 @@ const styles = {
     marginBottom: "10px",
     display: "flex",
     alignItems: "center",
-    justifyContent: "space-between",
+    gap: "10px",
   },
   productImage: {
     width: "50px",
     height: "50px",
-    marginRight: "10px",
-    objectFit: "cover",
-  },
-  reviewButton: {
-    padding: "8px 12px",
-    backgroundColor: "#28a745",
-    color: "#fff",
-    border: "none",
     borderRadius: "5px",
-    cursor: "pointer",
+    objectFit: "cover",
   },
 };
 

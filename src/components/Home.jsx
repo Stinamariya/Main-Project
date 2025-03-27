@@ -7,7 +7,7 @@ const HomePage = () => {
       style={{
         fontFamily: "Arial, sans-serif",
         textAlign: "center",
-        backgroundImage: "url('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTuw5NKrAIpaI43hSgJGt5iXz5YGQSs0HXLGWqqZkWbRWH_TGxaIPrvHr0A51nIv6pNQB0&usqp=CAU')",
+        backgroundImage: "url('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSfDMf3Fmu58pImuumotXNTd2GXKhGr8CNCob3ziIVjj0snylCiybi9rloXkay80jaAAH8&usqp=CAU')",
         backgroundSize: "cover",
         backgroundPosition: "center",
         minHeight: "100vh",
@@ -24,7 +24,7 @@ const HomePage = () => {
           alignItems: "center",
         }}
       >
-        <h1>Personal Skincare Assistant</h1>
+        
         {/* <div>
           <Link
             to="/signup"

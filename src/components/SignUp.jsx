@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom"; // Import Link from react-router-dom
 
 const Signup = () => {
     const [formData, setFormData] = useState({
@@ -34,7 +35,6 @@ const Signup = () => {
         }
     };
 
-    // Full-page background image styles
     const containerStyle = {
         display: "flex",
         flexDirection: "column",
@@ -46,24 +46,24 @@ const Signup = () => {
         border: "1px solid #ddd",
         borderRadius: "8px",
         backgroundColor: "#f9f9f9",
-        position: "absolute", // Ensure the form is positioned above the background image
+        position: "absolute",
         top: "50%",
         left: "50%",
-        transform: "translate(-50%, -50%)", // Center the form on the page
-        zIndex: 2, // Ensures the form appears above the background image
+        transform: "translate(-50%, -50%)",
+        zIndex: 2,
         boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
     };
 
     const pageBackgroundStyle = {
-        position: "fixed", // Make the background image fill the entire page
+        position: "fixed",
         top: 0,
         left: 0,
         width: "100%",
         height: "100%",
-        backgroundImage: "url('https://www.shutterstock.com/image-photo/light-green-serum-texture-aloe-260nw-1711629997.jpg')", // Replace with your image URL
-        backgroundSize: "cover", // Ensure the image covers the entire viewport
+        backgroundImage: "url('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSfDMf3Fmu58pImuumotXNTd2GXKhGr8CNCob3ziIVjj0snylCiybi9rloXkay80jaAAH8&usqp=CAU')",
+        backgroundSize: "cover",
         backgroundPosition: "center",
-        zIndex: 1, // Keeps the background image behind the form
+        zIndex: 1,
     };
 
     const headingStyle = {
@@ -101,6 +101,13 @@ const Signup = () => {
     const errorStyle = {
         color: "red",
         marginBottom: "15px",
+    };
+
+    const loginLinkStyle = {
+        textAlign: "center",
+        marginTop: "20px",
+        color: "#007bff",
+        textDecoration: "none",
     };
 
     return (
@@ -151,6 +158,9 @@ const Signup = () => {
                     </select>
                     <button type="submit" style={buttonStyle}>Sign Up</button>
                 </form>
+                <Link to="/login" style={loginLinkStyle}>
+                    Already have an account? Login here
+                </Link>
             </div>
         </div>
     );

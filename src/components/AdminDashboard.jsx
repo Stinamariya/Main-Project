@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import AdmNavbar from './AdmNavbar';
 
 const AdminDashboard = () => {
   const [stats, setStats] = useState({ totalProducts: 0, totalUsers: 0, totalOrders: 0 });
@@ -19,6 +20,7 @@ const AdminDashboard = () => {
   }, []);
 
   return (
+    
     <div
       style={{
         fontFamily: "Arial, sans-serif",
@@ -83,11 +85,24 @@ const AdminDashboard = () => {
           marginTop: "30px",
         }}
       >
-        <Link to="/admin/products" style={{ textDecoration: "none" }}>
+        <Link to="/admin/users" style={{ textDecoration: "none" }}>
           <div
             style={{
               padding: "20px",
               backgroundColor: "#007BFF",
+              color: "white",
+              borderRadius: "10px",
+              cursor: "pointer",
+            }}
+          >
+            Manage Users
+          </div>
+        </Link>
+        <Link to="/admin/products" style={{ textDecoration: "none" }}>
+          <div
+            style={{
+              padding: "20px",
+              backgroundColor: "#28A745",
               color: "white",
               borderRadius: "10px",
               cursor: "pointer",
@@ -100,26 +115,13 @@ const AdminDashboard = () => {
           <div
             style={{
               padding: "20px",
-              backgroundColor: "#28A745",
-              color: "white",
-              borderRadius: "10px",
-              cursor: "pointer",
-            }}
-          >
-            Manage Orders
-          </div>
-        </Link>
-        <Link to="/admin/users" style={{ textDecoration: "none" }}>
-          <div
-            style={{
-              padding: "20px",
               backgroundColor: "#DC3545",
               color: "white",
               borderRadius: "10px",
               cursor: "pointer",
             }}
           >
-            Manage Users
+            Manage Orders
           </div>
         </Link>
       </div>

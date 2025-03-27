@@ -28,6 +28,8 @@ import ManageUsers from "./components/ManageUsers";
 import ManageOrders from "./components/ManageOrders";
 import MyOrders from "./components/MyOrders";
 import Review from "./components/Review";
+import FeedbackPage from './components/FeedbackPage';
+import AdmNavbar from './components/AdmNavbar';
 
 
 // import OrderSummary from "./components/OrderSummary";
@@ -89,7 +91,8 @@ function App() {
           <Route path="/myorders" element={<MyOrders />} />
           <Route path="/orderconfirm/:orderId" element={<OrderConfirmation />} />
           <Route path="/review/:productId" element={<Review />} />
-          
+          <Route path="/feedback" element={<FeedbackPage />} />
+          <Route path="/admnav" element={<AdmNavbar />} />
 
        
           {/* <Route path="/reviewform" element={<ReviewForm />} /> */}
