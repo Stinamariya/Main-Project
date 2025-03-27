@@ -21,12 +21,14 @@ import { Payment } from "@mui/icons-material";
 import Orders from "./components/Orders";
 import ProductDetails from "./components/ProductDetails";
 
-import ReviewForm from "./components/ReviewForm";
+// import ReviewForm from "./components/ReviewForm";
 import ProductReviews from "./components/ProductReviews";
 import ManageProducts from "./components/ManageProducts";
 import ManageUsers from "./components/ManageUsers";
 import ManageOrders from "./components/ManageOrders";
 import MyOrders from "./components/MyOrders";
+import Review from "./components/Review";
+
 
 // import OrderSummary from "./components/OrderSummary";
 // import OrderManagement from "./components/OrderManagement";
@@ -78,18 +80,19 @@ function App() {
           <Route path="/payment" element={<Payment />} />
           <Route path="/order-confirmation" element={<OrderConfirmation />} />
           <Route path="/orders" element={<Orders />} />
-          <Route path="/product/:id" element={<ProductDetails />} />
+          <Route path="/product/:productId" element={<ProductDetails />} />
           <Route path="/product/:productId/reviews" element={<ProductReviews />} />
-          <Route path="/product/:id/add-review" element={<ReviewForm />} />
+          {/* <Route path="/product/:id/add-review" element={<ReviewForm />} /> */}
           <Route path="/admin/products" element={<ManageProducts />} />
           <Route path="/admin/users" element={<ManageUsers />} />
           <Route path="/admin/orders" element={<ManageOrders />} />
           <Route path="/myorders" element={<MyOrders />} />
           <Route path="/orderconfirm/:orderId" element={<OrderConfirmation />} />
+          <Route path="/review/:productId" element={<Review />} />
           
 
        
-          <Route path="/reviewform" element={<ReviewForm />} />
+          {/* <Route path="/reviewform" element={<ReviewForm />} /> */}
         </Routes>
       </BrowserRouter>
     </CartProvider>

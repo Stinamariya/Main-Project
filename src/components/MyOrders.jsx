@@ -2,11 +2,10 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 const MyOrders = () => {
-  const [orders, setOrders] = useState([]); // Store orders
-  const [loading, setLoading] = useState(true); // Loading state
-  const [error, setError] = useState(null); // Error state
-  const navigate = useNavigate(); // Navigation hook
-
+  const [orders, setOrders] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const navigate = useNavigate();
   const userId = localStorage.getItem("userId");
 
   useEffect(() => {
@@ -15,80 +14,81 @@ const MyOrders = () => {
       return;
     }
 
-    setLoading(true); // Start loading state
+    setLoading(true);
 
     fetch(`http://localhost:3031/api/orders/${userId}`)
       .then((response) => response.json())
       .then((data) => {
-        console.log("Fetched Orders:", data); // Debugging: log fetched data
+        console.log("Fetched Orders:", data);
         if (data.orders) {
-          setOrders(data.orders); // Set orders if available
+          setOrders(data.orders);
         } else {
           setError("No orders found.");
         }
       })
       .catch((error) => {
-        setError("Error fetching orders."); // Set error if fetching fails
+        setError("Error fetching orders.");
         console.error("Error fetching orders:", error);
       })
-      .finally(() => setLoading(false)); // End loading state
+      .finally(() => setLoading(false));
   }, [userId]);
 
-  // Function to navigate to order confirmation page
-  const goToOrderConfirmation = (orderId) => {
-    navigate(`/orderconfirm/${orderId}`);
+  const goToProductDetails = (productId) => {
+    navigate(`/product/${productId}`);
   };
 
-  // Function to navigate to the previous page
   const goBack = () => {
-    navigate(-1); // Go back one step in history
+    navigate(-1);
   };
 
   return (
     <div style={styles.container}>
       <h2>My Orders</h2>
 
-      {/* Show error message if there is an error */}
       {error && <p style={styles.errorText}>{error}</p>}
-
-      {/* Display total number of orders */}
       <p>Orders found: {orders.length}</p>
 
-      {/* Back Button */}
       <button onClick={goBack} style={styles.backButton}>
         Back
       </button>
 
-      {/* Show loading state */}
       {loading ? (
         <p>Loading orders...</p>
       ) : orders.length > 0 ? (
-        // Display orders if available
         orders.map((order) => (
           <div key={order._id} style={styles.orderCard}>
-            <h3>Order ID: {order._id}</h3> {/* Displaying the Order ID */}
+            <h3>Order ID: {order._id}</h3>
             <h3>Order by: {order.name}</h3>
             <p><strong>Phone:</strong> {order.phone}</p>
             <p><strong>Address:</strong> {order.address}</p>
             <p><strong>Payment Method:</strong> {order.paymentMethod}</p>
-            <p><strong>Status:</strong> {order.status}</p> {/* Displaying the order status */}
-            
+            <p><strong>Status:</strong> {order.status}</p>
+
             <h4>Products:</h4>
             <ul style={styles.productList}>
-              {order.products.map((product) => (
-                <li key={product._id} style={styles.productItem}>
-                  <img
-                    src={product.productPic}
-                    alt={product.productName}
-                    style={styles.productImage}
-                  />
-                  <strong>{product.productName}</strong> - ₹{product.price} (Qty: {product.quantity})
-                </li>
-              ))}
-            </ul>
+              {/* Track unique products to avoid duplicate review buttons */}
+              {Array.from(new Set(order.products.map(p => p._id))).map((uniqueProductId) => {
+                const product = order.products.find(p => p._id === uniqueProductId);
+                return (
+                  <li key={product._id} style={styles.productItem}>
+                    <img
+                      src={product.productPic}
+                      alt={product.productName}
+                      style={styles.productImage}
+                    />
+                    <strong>{product.productName}</strong> - ₹{product.price} (Qty: {product.quantity})
 
-            {/* Order Confirmation Button */}
-            
+                    {/* Single Review Button per unique product */}
+                    <button
+                      style={styles.reviewButton}
+                      onClick={() => goToProductDetails(product._id)}
+                    >
+                      Leave a Review
+                    </button>
+                  </li>
+                );
+              })}
+            </ul>
           </div>
         ))
       ) : (
@@ -98,7 +98,8 @@ const MyOrders = () => {
   );
 };
 
-// Inline styles object
+
+// Styles
 const styles = {
   container: {
     padding: "20px",
@@ -134,6 +135,7 @@ const styles = {
     marginBottom: "10px",
     display: "flex",
     alignItems: "center",
+    justifyContent: "space-between",
   },
   productImage: {
     width: "50px",
@@ -141,9 +143,8 @@ const styles = {
     marginRight: "10px",
     objectFit: "cover",
   },
-  confirmButton: {
-    marginTop: "10px",
-    padding: "10px",
+  reviewButton: {
+    padding: "8px 12px",
     backgroundColor: "#28a745",
     color: "#fff",
     border: "none",
@@ -153,7 +154,3 @@ const styles = {
 };
 
 export default MyOrders;
-
-
-
-
