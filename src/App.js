@@ -30,6 +30,7 @@ import MyOrders from "./components/MyOrders";
 import Review from "./components/Review";
 import FeedbackPage from './components/FeedbackPage';
 import AdmNavbar from './components/AdmNavbar';
+import FeedbackManagement from "./components/FeedbackManagement";
 
 
 // import OrderSummary from "./components/OrderSummary";
@@ -43,6 +44,7 @@ function App() {
   return (
     <CartProvider>
       <BrowserRouter>
+      
       <Navbar /> 
         <Routes>
           <Route path="/" element={<Home />} />
@@ -93,7 +95,7 @@ function App() {
           <Route path="/review/:productId" element={<Review />} />
           <Route path="/feedback" element={<FeedbackPage />} />
           <Route path="/admnav" element={<AdmNavbar />} />
-
+          <Route path="/admin/feedback" element={<FeedbackManagement />} />
        
           {/* <Route path="/reviewform" element={<ReviewForm />} /> */}
         </Routes>
@@ -103,3 +105,86 @@ function App() {
 }
 
 export default App;
+
+
+
+
+
+
+
+
+
+
+
+// import { CartProvider } from "./context/CartContext";
+// import { BrowserRouter, Route, Routes } from "react-router-dom";
+// import Home from "./components/Home";
+// import Login from "./components/Login";
+// import SignUp from "./components/SignUp";
+// import Results from "./components/Results";
+// import UserDashboard from "./components/UserDashboard";
+// import Questionnaire from "./components/Questionnaire";
+// import Products from "./components/Products";
+// import Checkout from "./components/Checkout";
+// import ProductList from "./components/ProductList";
+// import Cart from "./components/Cart";
+// import OrderConfirmation from "./components/OrderConfirmation";
+// import Orders from "./components/Orders";
+// import ProductDetails from "./components/ProductDetails";
+// import ProductReviews from "./components/ProductReviews";
+// import MyOrders from "./components/MyOrders";
+// import Review from "./components/Review";
+// import FeedbackPage from "./components/FeedbackPage";
+// import AdminDashboard from "./components/AdminDashboard";
+// import ManageProducts from "./components/ManageProducts";
+// import ManageUsers from "./components/ManageUsers";
+// import ManageOrders from "./components/ManageOrders";
+// import FeedbackManagement from "./components/FeedbackManagement";
+// import { useState } from "react";
+// import Navbar from "./components/Navbar";
+// import AuthProvider from "./context/AuthContext"; // Import AuthProvider
+
+// function App() {
+//   const [userRole, setUserRole] = useState(localStorage.getItem("role") || "user"); // Get role from local storage or default to 'user'
+
+//   return (
+//     <AuthProvider>
+//     <CartProvider>
+//       <BrowserRouter>
+//         <Navbar userRole={userRole} />  {/* Conditionally render navbar */}
+//         <Routes>
+//           <Route path="/" element={<Home />} />
+//           <Route path="/signup" element={<SignUp />} />
+//           <Route path="/login" element={<Login />} />
+//           <Route path="/results" element={<Results />} />
+
+//           {/* User Routes */}
+//           <Route path="/user-dashboard" element={<UserDashboard />} />
+//           <Route path="/questionnaire" element={<Questionnaire />} />
+//           <Route path="/products" element={<Products />} />
+//           <Route path="/checkout" element={<Checkout />} />
+//           <Route path="/recommended-products" element={<ProductList />} />
+//           <Route path="/cart" element={<Cart />} />
+//           <Route path="/orders" element={<Orders />} />
+//           <Route path="/orderconfirm/:orderId" element={<OrderConfirmation />} />
+//           <Route path="/myorders" element={<MyOrders />} />
+//           <Route path="/feedback" element={<FeedbackPage />} />
+
+//           {/* Admin Routes */}
+//           <Route path="/admin/*">
+//             <Route index element={<AdminDashboard />} />
+//             <Route path="products" element={<ManageProducts />} />
+//             <Route path="users" element={<ManageUsers />} />
+//             <Route path="orders" element={<ManageOrders />} />
+//             <Route path="feedback" element={<FeedbackManagement />} />
+//           </Route>
+//         </Routes>
+//       </BrowserRouter>
+//     </CartProvider>
+//     </AuthProvider>
+//   );
+// }
+
+// export default App;
+
+

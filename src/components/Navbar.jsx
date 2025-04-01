@@ -6,10 +6,12 @@ function Navbar() {
   const navigate = useNavigate();
   const location = useLocation();
   const isAuthenticated = !!localStorage.getItem("token"); // Ensure boolean value
+  const userRole = localStorage.getItem("role"); // Assuming the role is stored in localStorage
 
   const handleLogout = () => {
     if (window.confirm("Are you sure you want to logout?")) {
       localStorage.removeItem("token"); // Remove authentication token
+      localStorage.removeItem("role"); // Remove role from localStorage
       navigate("/login"); // Redirect to login page
     }
   };
@@ -19,8 +21,14 @@ function Navbar() {
       <h2 style={styles.logo}>Personal Skincare Assistant</h2>
       <div style={styles.links}>
         <NavLink to="/" icon={<FaHome />} label="Home" location={location} />
-        {/* <NavLink to="/cart" icon={<FaShoppingCart />} label="Cart" location={location} /> */}
-        <NavLink to="/feedback" icon={<FaComments />} label="Feedback" location={location} /> {/* Add Feedback Link */}
+
+        {/* Conditionally render links based on user role */}
+        {userRole === "user" && (
+          <>
+            <NavLink to="/cart" icon={<FaShoppingCart />} label="Cart" location={location} />
+            <NavLink to="/feedback" icon={<FaComments />} label="Feedback" location={location} />
+          </>
+        )}
 
         {isAuthenticated ? (
           <button onClick={handleLogout} style={styles.logoutButton}>

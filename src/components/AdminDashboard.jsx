@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import AdmNavbar from './AdmNavbar';
 
 const AdminDashboard = () => {
-  const [stats, setStats] = useState({ totalProducts: 0, totalUsers: 0, totalOrders: 0 });
+  const [stats, setStats] = useState({ totalProducts: 0, totalUsers: 0, totalOrders: 0, totalFeedback: 0 });
 
   useEffect(() => {
     const fetchStats = async () => {
@@ -20,7 +20,6 @@ const AdminDashboard = () => {
   }, []);
 
   return (
-    
     <div
       style={{
         fontFamily: "Arial, sans-serif",
@@ -73,13 +72,26 @@ const AdminDashboard = () => {
           <h3>Orders</h3>
           <p>{stats.totalOrders}</p>
         </div>
+        {/* Feedback section */}
+        <div
+          style={{
+            width: "200px",
+            padding: "20px",
+            backgroundColor: "#f8f9fa",
+            textAlign: "center",
+            borderRadius: "10px",
+          }}
+        >
+          <h3>Feedback</h3>
+          <p>{stats.totalFeedback}</p>
+        </div>
       </div>
 
       {/* Management Links */}
       <div
         style={{
           display: "grid",
-          gridTemplateColumns: "repeat(3, 1fr)",
+          gridTemplateColumns: "repeat(4, 1fr)", // Changed to 4 columns for the new Feedback link
           gap: "20px",
           textAlign: "center",
           marginTop: "30px",
@@ -122,6 +134,20 @@ const AdminDashboard = () => {
             }}
           >
             Manage Orders
+          </div>
+        </Link>
+        {/* New link for Feedback Management */}
+        <Link to="/admin/feedback" style={{ textDecoration: "none" }}>
+          <div
+            style={{
+              padding: "20px",
+              backgroundColor: "#FFC107", // Yellow color for the feedback section
+              color: "white",
+              borderRadius: "10px",
+              cursor: "pointer",
+            }}
+          >
+            Manage Feedback
           </div>
         </Link>
       </div>
