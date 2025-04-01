@@ -19,6 +19,7 @@ const modalStyles = {
 
 const ManageProducts = () => {
   const [products, setProducts] = useState([]);
+  const [filteredProducts, setFilteredProducts] = useState([]); // State for filtered products
   const [productName, setProductName] = useState("");
   const [skinType, setSkinType] = useState("");
   const [concern, setConcern] = useState("");
@@ -33,13 +34,17 @@ const ManageProducts = () => {
   const [editingProduct, setEditingProduct] = useState(null);
   const [modalIsOpen, setModalIsOpen] = useState(false); // Modal state
   const [page, setPage] = useState(1); // Pagination state
-  const [productsToShow, setProductsToShow] = useState(5); // Number of products to show initially
+  const [searchTerm, setSearchTerm] = useState(""); // State for search term
 
   const navigate = useNavigate();
 
   useEffect(() => {
     fetchProducts(page);
   }, [page]);
+
+  useEffect(() => {
+    filterProducts();
+  }, [searchTerm, products]); // Re-filter products whenever searchTerm or products change
 
   const fetchProducts = async (pageNum) => {
     try {
@@ -48,6 +53,16 @@ const ManageProducts = () => {
     } catch (error) {
       console.error("Error fetching products:", error);
     }
+  };
+
+  const filterProducts = () => {
+    const lowerCaseSearchTerm = searchTerm.toLowerCase();
+    const filtered = products.filter(
+      (product) =>
+        product.productName.toLowerCase().includes(lowerCaseSearchTerm) ||
+        product.brand.toLowerCase().includes(lowerCaseSearchTerm)
+    );
+    setFilteredProducts(filtered);
   };
 
   const addProduct = async () => {
@@ -164,42 +179,46 @@ const ManageProducts = () => {
     setPrice("");
   };
 
-  const showMoreProducts = () => {
-    setProductsToShow(productsToShow + 5); // Show 5 more products
-  };
-
   return (
     <div style={styles.container}>
       <h2 style={styles.header}>Manage Products</h2>
 
       <button onClick={() => navigate("/admin-dashboard")} style={styles.backButton}>
-        &larr; Back to Dashboard
+        &larr; Back 
       </button>
+
+      <div style={styles.searchContainer}>
+        <input
+          type="text"
+          placeholder="Search products by name or brand"
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+          style={styles.searchInput}
+        />
+      </div>
 
       <div style={styles.buttonContainer}>
         <button onClick={openAddModal} style={styles.addButton}>Add Product</button>
       </div>
 
       <div style={styles.productCardsContainer}>
-        {products.slice(0, productsToShow).map((product) => (
-          <div key={product._id} style={styles.productCard}>
-            <img src={product.productPic} alt={product.productName} style={styles.productImage} />
-            <div style={styles.productInfo}>
-              <h3>{product.productName}</h3>
-              <p>{product.skinType} Skin - {product.concern}</p>
-              <p><strong>${product.price}</strong></p>
+        {filteredProducts.length > 0 ? (
+          filteredProducts.map((product) => (
+            <div key={product._id} style={styles.productCard}>
+              <img src={product.productPic} alt={product.productName} style={styles.productImage} />
+              <div style={styles.productInfo}>
+                <h3>{product.productName}</h3>
+                <p>{product.skinType} Skin - {product.concern}</p>
+                <p><strong>${product.price}</strong></p>
+              </div>
+              <div style={styles.cardButtons}>
+                <button onClick={() => openEditModal(product)} style={styles.editButton}>Edit</button>
+                <button onClick={() => deleteProduct(product._id)} style={styles.deleteButton}>Delete</button>
+              </div>
             </div>
-            <div style={styles.cardButtons}>
-              <button onClick={() => openEditModal(product)} style={styles.editButton}>Edit</button>
-              <button onClick={() => deleteProduct(product._id)} style={styles.deleteButton}>Delete</button>
-            </div>
-          </div>
-        ))}
-      </div>
-
-      <div style={styles.paginationContainer}>
-        {productsToShow < products.length && (
-          <button onClick={showMoreProducts} style={styles.showMoreButton}>Show More</button>
+          ))
+        ) : (
+          <p>No products found</p>
         )}
       </div>
 
@@ -275,8 +294,10 @@ const ManageProducts = () => {
             placeholder="Price"
           />
           <div style={styles.modalButtons}>
-            <button type="submit" style={styles.submitButton}>{isAdding ? "Add Product" : "Update Product"}</button>
-            <button type="button" onClick={closeModal} style={styles.cancelButton}>Cancel</button>
+            <button type="button" onClick={closeModal} style={styles.closeButton}>Close</button>
+            <button type="submit" style={styles.submitButton}>
+              {isAdding ? "Add Product" : "Update Product"}
+            </button>
           </div>
         </form>
       </Modal>
@@ -284,89 +305,81 @@ const ManageProducts = () => {
   );
 };
 
+// Styles
 const styles = {
   container: {
-    padding: '20px',
-    backgroundColor: '#f4f4f4',
+    width: '90%',
+    margin: '0 auto',
+    paddingTop: '20px',
   },
   header: {
-    textAlign: 'center',
-    color: '#333',
+    fontSize: '2rem',
+    marginBottom: '20px',
   },
   backButton: {
-    display: 'block',
-    margin: '10px auto',
-    padding: '10px 15px',
+    fontSize: '16px',
     backgroundColor: '#007bff',
-    color: '#fff',
+    color: 'white',
+    padding: '10px 20px',
     border: 'none',
-    borderRadius: '5px',
     cursor: 'pointer',
+    marginBottom: '20px',
+  },
+  searchContainer: {
+    marginBottom: '20px',
+  },
+  searchInput: {
+    width: '100%',
+    padding: '10px',
+    borderRadius: '5px',
+    border: '1px solid #ccc',
   },
   buttonContainer: {
-    textAlign: 'center',
     marginBottom: '20px',
   },
   addButton: {
-    padding: '10px 15px',
     backgroundColor: '#28a745',
-    color: '#fff',
+    color: 'white',
+    padding: '10px 20px',
     border: 'none',
-    borderRadius: '5px',
     cursor: 'pointer',
   },
   productCardsContainer: {
-    display: 'flex',
-    flexWrap: 'wrap',
-    gap: '15px',
-    justifyContent: 'center',
+    display: 'grid',
+    gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))',
+    gap: '20px',
   },
   productCard: {
-    backgroundColor: '#fff',
+    border: '1px solid #ddd',
     borderRadius: '8px',
+    padding: '20px',
     boxShadow: '0 2px 6px rgba(0, 0, 0, 0.1)',
-    width: '200px',
-    padding: '15px',
-    textAlign: 'center',
   },
   productImage: {
     width: '100%',
     height: 'auto',
-    borderRadius: '5px',
+    borderRadius: '8px',
   },
   productInfo: {
-    marginTop: '10px',
+    marginTop: '15px',
   },
   cardButtons: {
-    marginTop: '10px',
+    display: 'flex',
+    justifyContent: 'space-between',
+    marginTop: '15px',
   },
   editButton: {
-    padding: '5px 10px',
-    backgroundColor: '#007bff',
-    color: '#fff',
+    backgroundColor: '#ffc107',
+    color: 'white',
+    padding: '10px 20px',
     border: 'none',
-    borderRadius: '5px',
     cursor: 'pointer',
-    marginRight: '5px',
   },
   deleteButton: {
-    padding: '5px 10px',
     backgroundColor: '#dc3545',
-    color: '#fff',
+    color: 'white',
+    padding: '10px 20px',
     border: 'none',
-    borderRadius: '5px',
-    cursor: 'pointer',
-  },
-  paginationContainer: {
-    textAlign: 'center',
-    marginTop: '20px',
-  },
-  showMoreButton: {
-    padding: '10px 15px',
-    backgroundColor: '#007bff',
-    color: '#fff',
-    border: 'none',
-    borderRadius: '5px',
     cursor: 'pointer',
   },
   form: {
@@ -375,41 +388,39 @@ const styles = {
   },
   input: {
     padding: '10px',
-    marginBottom: '10px',
-    border: '1px solid #ddd',
+    marginBottom: '15px',
     borderRadius: '5px',
-  },
-  select: {
-    padding: '10px',
-    marginBottom: '10px',
-    border: '1px solid #ddd',
-    borderRadius: '5px',
+    border: '1px solid #ccc',
   },
   textarea: {
     padding: '10px',
-    marginBottom: '10px',
-    border: '1px solid #ddd',
+    marginBottom: '15px',
     borderRadius: '5px',
+    border: '1px solid #ccc',
     height: '100px',
+  },
+  select: {
+    padding: '10px',
+    marginBottom: '15px',
+    borderRadius: '5px',
+    border: '1px solid #ccc',
   },
   modalButtons: {
     display: 'flex',
     justifyContent: 'space-between',
   },
-  submitButton: {
-    padding: '10px 15px',
-    backgroundColor: '#007bff',
-    color: '#fff',
+  closeButton: {
+    backgroundColor: '#6c757d',
+    color: 'white',
+    padding: '10px 20px',
     border: 'none',
-    borderRadius: '5px',
     cursor: 'pointer',
   },
-  cancelButton: {
-    padding: '10px 15px',
-    backgroundColor: '#dc3545',
-    color: '#fff',
+  submitButton: {
+    backgroundColor: '#007bff',
+    color: 'white',
+    padding: '10px 20px',
     border: 'none',
-    borderRadius: '5px',
     cursor: 'pointer',
   },
 };

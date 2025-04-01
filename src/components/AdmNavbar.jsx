@@ -1,9 +1,11 @@
-import React from "react";
-import { Link, useNavigate } from "react-router-dom";
-import { FaTachometerAlt, FaBox, FaUsers, FaSignOutAlt } from "react-icons/fa"; // Admin-specific icons
+import React from 'react';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
+import { FaHome, FaUser, FaProductHunt, FaBox, FaComments } from 'react-icons/fa'; // Import icons
 
 function AdminNavbar() {
   const navigate = useNavigate();
+  const location = useLocation();
+  const isAuthenticated = !!localStorage.getItem('token'); // Ensure boolean value
 
   const handleLogout = () => {
     if (window.confirm("Are you sure you want to logout?")) {
@@ -14,69 +16,79 @@ function AdminNavbar() {
 
   return (
     <nav style={styles.navbar}>
-      <h2 style={styles.logo}>Admin Dashboard</h2>
+      <h2 style={styles.logo}>Personal Skincare Assistant</h2>
       <div style={styles.links}>
-        <Link to="/admin" style={styles.link}>
-          <FaTachometerAlt style={styles.icon} /> Dashboard
-        </Link>
-        <Link to="/admin/users" style={styles.link}>
-          <FaUsers style={styles.icon} /> Manage Users
-        </Link>
-        <Link to="/admin/products" style={styles.link}>
-          <FaBox style={styles.icon} /> Manage Products
-        </Link>
-        <button onClick={handleLogout} style={styles.logoutButton}>
-          <FaSignOutAlt style={styles.icon} /> Logout
-        </button>
+        <NavLink to="/" icon={<FaHome />} label="Home" location={location} />
+        
+        
+        {isAuthenticated ? (
+          <button onClick={handleLogout} style={styles.logoutButton}>
+            Logout
+          </button>
+        ) : (
+          <Link to="/login" style={styles.link}>Login</Link>
+        )}
       </div>
     </nav>
   );
 }
 
+// Helper component for nav links with active state
+const NavLink = ({ to, icon, label, location }) => {
+  const isActive = location.pathname === to;
+  return (
+    <Link to={to} style={{ ...styles.link, fontWeight: isActive ? 'bold' : 'normal' }}>
+      {icon} {label}
+    </Link>
+  );
+};
+
 const styles = {
   navbar: {
-    display: "flex",
-    flexDirection: "column",
-    alignItems: "flex-start",
-    backgroundColor: "#333",
-    padding: "20px",
-    color: "white",
-    height: "100vh", // Make the navbar take the full height
-    width: "200px", // Fixed width for the sidebar
-    position: "fixed", // Fix the navbar on the left
+    display: 'flex',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    backgroundColor: '#222',
+    padding: '15px 30px',
+    color: 'white',
+    boxShadow: '0 2px 5px rgba(0, 0, 0, 0.1)',
   },
   logo: {
-    fontSize: "1.5rem",
-    marginBottom: "20px",
+    fontSize: '1.8rem',
+    fontWeight: 'bold',
+    color: '#28a745', // Green color for the logo
   },
   links: {
-    display: "flex",
-    flexDirection: "column",
-    gap: "15px",
-    width: "100%",
+    display: 'flex',
+    gap: '20px',
+    alignItems: 'center',
   },
   link: {
-    color: "white",
-    textDecoration: "none",
-    fontSize: "1rem",
-    display: "flex",
-    alignItems: "center",
-    padding: "10px",
-    borderRadius: "5px",
-    backgroundColor: "#444",
+    color: '#f8f9fa',
+    textDecoration: 'none',
+    fontSize: '1.1rem',
+    display: 'flex',
+    alignItems: 'center',
+    padding: '8px 12px',
+    borderRadius: '5px',
+    transition: 'background-color 0.3s ease, color 0.3s ease',
   },
   logoutButton: {
-    color: "white",
-    backgroundColor: "#dc3545",
-    padding: "10px",
-    borderRadius: "5px",
-    border: "none",
-    cursor: "pointer",
-    display: "flex",
-    alignItems: "center",
+    backgroundColor: '#dc3545',
+    color: 'white',
+    padding: '8px 16px',
+    borderRadius: '5px',
+    border: 'none',
+    cursor: 'pointer',
+    transition: 'background-color 0.3s ease',
   },
-  icon: {
-    marginRight: "10px",
+  // Hover effects for links and buttons
+  linkHover: {
+    backgroundColor: '#28a745', // Green hover for links
+    color: '#fff',
+  },
+  logoutHover: {
+    backgroundColor: '#c82333', // Darker red hover for logout button
   },
 };
 

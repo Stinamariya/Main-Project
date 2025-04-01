@@ -16,7 +16,7 @@ function Results() {
   return (
     <div className="results-container">
       <div className="card-large">
-        <h1>🌿 Skin Analysis</h1>
+        <h1>Skin Analysis</h1>
         <div className="result-box">
           <p><strong>Skin Type:</strong> {prediction.skinType}</p>
           <p><strong>Skin Condition:</strong> {prediction.skinCondition}</p>
@@ -24,7 +24,7 @@ function Results() {
 
         <div className="btn-group">
           <button onClick={() => navigate("/Questionnaire")} className="btn back">🔙 Retake Test</button>
-          <button onClick={() => navigate("/products")} className="btn primary">💖 See Recommendations</button>
+          <button onClick={() => navigate("/products")} className="btn primary"> See Recommendations</button>
         </div>
       </div>
 
@@ -93,7 +93,7 @@ function Results() {
         }
 
         .primary {
-          background: #28C76F;
+          background:rgb(40, 48, 199);
           color: white;
         }
 
